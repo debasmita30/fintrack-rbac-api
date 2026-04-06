@@ -123,14 +123,16 @@ app.use(errorHandler as (err: Error, req: Request, res: Response, next: NextFunc
 
 // ── Start Server ──────────────────────────────────────────────────────────────
 if (env.NODE_ENV !== "test") {
-  app.listen(env.PORT, () => {
+  const PORT = process.env.PORT || env.PORT || 3000;
+
+  app.listen(PORT, "0.0.0.0", () => {
     console.log("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     console.log("  🚀  FinTrack API is running");
     console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    console.log(`  🌍  Server:  http://localhost:${env.PORT}`);
-    console.log(`  📄  API:     http://localhost:${env.PORT}/api/v1`);
-    console.log(`  📚  Docs:    http://localhost:${env.PORT}/api-docs`);
-    console.log(`  💚  Health:  http://localhost:${env.PORT}/health`);
+    console.log(`  🌍  Server:  http://localhost:${PORT}`);
+    console.log(`  📄  API:     http://localhost:${PORT}/api/v1`);
+    console.log(`  📚  Docs:    http://localhost:${PORT}/api-docs`);
+    console.log(`  💚  Health:  http://localhost:${PORT}/health`);
     console.log(`  🔧  Env:     ${env.NODE_ENV}`);
     console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
   });
