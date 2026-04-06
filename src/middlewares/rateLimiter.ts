@@ -1,4 +1,4 @@
-import rateLimit from "express-rate-limit";
+import rateLimit, { ipKeyGenerator } from "express-rate-limit";
 import { env } from "../config/env";
 
 const buildLimiter = (max: number, windowMs?: number) =>
@@ -7,7 +7,7 @@ const buildLimiter = (max: number, windowMs?: number) =>
     max,
     standardHeaders: true,
     legacyHeaders: false,
-    keyGenerator: (req) => req.ip ?? "unknown",
+    keyGenerator: (req) => ipKeyGenerator(req.ip ?? "unknown"),
     handler: (_req, res) => {
       res.status(429).json({
         success: false,
@@ -18,11 +18,6 @@ const buildLimiter = (max: number, windowMs?: number) =>
     },
   });
 
-/** General API rate limiter: 100 req / 15 min */
 export const apiLimiter = buildLimiter(env.RATE_LIMIT_MAX);
-
-/** Strict limiter for auth endpoints: 10 attempts / 15 min */
 export const authLimiter = buildLimiter(10);
-
-/** Relaxed limiter for read-heavy dashboard endpoints */
 export const dashboardLimiter = buildLimiter(200);
