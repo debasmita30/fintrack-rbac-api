@@ -18,6 +18,18 @@ const CATEGORIES = [
   "Insurance",
 ];
 
+const expenseCategories = [
+  "Food & Dining",
+  "Transport",
+  "Utilities",
+  "Healthcare",
+  "Entertainment",
+  "Shopping",
+  "Education",
+  "Rent",
+  "Insurance",
+];
+
 function randomBetween(min: number, max: number) {
   return Math.round((Math.random() * (max - min) + min) * 100) / 100;
 }
@@ -31,13 +43,11 @@ function randomDate(start: Date, end: Date) {
 async function main() {
   console.log("🌱 Seeding database...\n");
 
-  // Clean existing data
   await prisma.auditLog.deleteMany();
   await prisma.refreshToken.deleteMany();
   await prisma.transaction.deleteMany();
   await prisma.user.deleteMany();
 
-  // ── Create Users ──────────────────────────────────────────────────────────
   const hashedPassword = await bcrypt.hash("Password@123", 12);
 
   const admin = await prisma.user.create({
@@ -70,7 +80,7 @@ async function main() {
     },
   });
 
-  const inactiveUser = await prisma.user.create({
+  await prisma.user.create({
     data: {
       email: "inactive@fintrack.io",
       name: "Dave (Inactive)",
@@ -82,13 +92,12 @@ async function main() {
 
   console.log("✅ Created 4 users");
 
-  // ── Create Transactions ───────────────────────────────────────────────────
   const now = new Date();
   const sixMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 6, 1);
 
-  const transactionData = [];
+  const transactionData: any[] = [];
 
-  // Income transactions
+  // ── Admin income transactions ─────────────────────────────────────────────
   for (let i = 0; i < 24; i++) {
     const isRecurring = i % 4 === 0;
     transactionData.push({
@@ -104,49 +113,8 @@ async function main() {
       createdById: admin.id,
     });
   }
-  // Analyst transactions
-for (let i = 0; i < 20; i++) {
-  const category = expenseCategories[i % expenseCategories.length];
-  transactionData.push({
-    amount: randomBetween(50, 1500),
-    type: "EXPENSE",
-    category,
-    date: randomDate(sixMonthsAgo, now),
-    description: `${category} expense`,
-    notes: null,
-    tags: JSON.stringify(["expense"]),
-    createdById: analyst.id,  // ← analyst's data
-  });
-}
 
-// Viewer transactions (read-only user, but has historical data)
-for (let i = 0; i < 10; i++) {
-  const category = expenseCategories[i % expenseCategories.length];
-  transactionData.push({
-    amount: randomBetween(50, 800),
-    type: "EXPENSE",
-    category,
-    date: randomDate(sixMonthsAgo, now),
-    description: `${category} expense`,
-    notes: null,
-    tags: JSON.stringify(["expense"]),
-    createdById: viewer.id,  // ← viewer's data
-  });
-}
-
-  // Expense transactions
-  const expenseCategories = [
-    "Food & Dining",
-    "Transport",
-    "Utilities",
-    "Healthcare",
-    "Entertainment",
-    "Shopping",
-    "Education",
-    "Rent",
-    "Insurance",
-  ];
-
+  // ── Admin expense transactions ────────────────────────────────────────────
   for (let i = 0; i < 60; i++) {
     const category = expenseCategories[i % expenseCategories.length];
     transactionData.push({
@@ -161,7 +129,7 @@ for (let i = 0; i < 10; i++) {
     });
   }
 
-  // A few soft-deleted transactions
+  // ── Admin soft-deleted transactions ───────────────────────────────────────
   for (let i = 0; i < 5; i++) {
     transactionData.push({
       amount: randomBetween(100, 500),
@@ -177,11 +145,67 @@ for (let i = 0; i < 10; i++) {
     });
   }
 
+  // ── Analyst expense transactions ──────────────────────────────────────────
+  for (let i = 0; i < 20; i++) {
+    const category = expenseCategories[i % expenseCategories.length];
+    transactionData.push({
+      amount: randomBetween(50, 1500),
+      type: "EXPENSE",
+      category,
+      date: randomDate(sixMonthsAgo, now),
+      description: `${category} expense`,
+      notes: null,
+      tags: JSON.stringify(["expense"]),
+      createdById: analyst.id,
+    });
+  }
+
+  // ── Analyst income transactions ───────────────────────────────────────────
+  for (let i = 0; i < 10; i++) {
+    transactionData.push({
+      amount: randomBetween(2000, 7000),
+      type: "INCOME",
+      category: i % 2 === 0 ? "Salary" : "Freelance",
+      date: randomDate(sixMonthsAgo, now),
+      description: i % 2 === 0 ? "Monthly salary" : "Freelance project",
+      notes: null,
+      tags: JSON.stringify(["income"]),
+      createdById: analyst.id,
+    });
+  }
+
+  // ── Viewer expense transactions ───────────────────────────────────────────
+  for (let i = 0; i < 10; i++) {
+    const category = expenseCategories[i % expenseCategories.length];
+    transactionData.push({
+      amount: randomBetween(50, 800),
+      type: "EXPENSE",
+      category,
+      date: randomDate(sixMonthsAgo, now),
+      description: `${category} expense`,
+      notes: null,
+      tags: JSON.stringify(["expense"]),
+      createdById: viewer.id,
+    });
+  }
+
+  // ── Viewer income transactions ────────────────────────────────────────────
+  for (let i = 0; i < 5; i++) {
+    transactionData.push({
+      amount: randomBetween(1000, 4000),
+      type: "INCOME",
+      category: "Salary",
+      date: randomDate(sixMonthsAgo, now),
+      description: "Monthly salary",
+      notes: null,
+      tags: JSON.stringify(["income"]),
+      createdById: viewer.id,
+    });
+  }
+
   await prisma.transaction.createMany({ data: transactionData });
 
   console.log(`✅ Created ${transactionData.length} transactions`);
-
-  // ── Seed Audit Logs ───────────────────────────────────────────────────────
   console.log("✅ Skipped audit logs (auto-generated on login)\n");
 
   console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
