@@ -527,7 +527,7 @@ Tests use an isolated `test.db` SQLite database that is created and torn down au
 
 <br/>
 
-**Built by [Debasmita](https://github.com/debasmita30) for the Zorvyn FinTech Backend Intern Assessment**
+**Built by [Debasmita](https://github.com/debasmita30) **
 
 <br/>
 
