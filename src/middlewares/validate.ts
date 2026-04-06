@@ -5,7 +5,7 @@ import { ApiError } from "../utils/ApiError";
 type Target = "body" | "query" | "params";
 
 export function validate(target: Target, schema: ZodSchema) {
-  return (req: Request, res: Response, next: NextFunction) => {
+  return (req: Request, _res: Response, next: NextFunction) => {
     const result = schema.safeParse(req[target]);
     if (!result.success) {
       const errors = (result.error as ZodError).errors.map((e) => ({
@@ -19,7 +19,11 @@ export function validate(target: Target, schema: ZodSchema) {
     }
 
     if (target === "query") {
-      res.locals.parsedQuery = result.data;
+      Object.defineProperty(req, "query", {
+        value: result.data,
+        writable: true,
+        configurable: true,
+      });
     } else {
       req[target] = result.data;
     }
