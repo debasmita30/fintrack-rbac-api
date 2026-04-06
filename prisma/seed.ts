@@ -117,14 +117,16 @@ async function main() {
   // ── Admin expense transactions ────────────────────────────────────────────
   for (let i = 0; i < 60; i++) {
     const category = expenseCategories[i % expenseCategories.length];
+    // Every 10th transaction is a deliberate spike to trigger anomaly detection
+    const isSpike = i % 10 === 0;
     transactionData.push({
-      amount: randomBetween(50, 1500),
+      amount: isSpike ? randomBetween(8000, 15000) : randomBetween(50, 400),
       type: "EXPENSE",
       category,
       date: randomDate(sixMonthsAgo, now),
-      description: `${category} expense`,
-      notes: null,
-      tags: JSON.stringify(["expense", category.toLowerCase()]),
+      description: isSpike ? `Unusual ${category} spike` : `${category} expense`,
+      notes: isSpike ? "Flagged as anomaly" : null,
+      tags: JSON.stringify(isSpike ? ["spike", "anomaly"] : ["expense"]),
       createdById: admin.id,
     });
   }
