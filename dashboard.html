@@ -19,19 +19,14 @@
   --r:12px;--r2:8px;
 }
 body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;min-height:100vh;font-size:14px;line-height:1.5}
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
-/* ── SCROLLBAR ── */
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
-
-/* ── LOGIN ── */
 #login{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg);z-index:100}
 .login-wrap{width:400px}
 .login-logo{font-size:32px;font-weight:700;margin-bottom:8px;letter-spacing:-1px}
 .login-logo span{color:var(--purple)}
-.login-sub{color:var(--muted);font-size:14px;margin-bottom:40px}
+.login-sub{color:var(--muted);font-size:14px;margin-bottom:24px}
 .login-card{background:var(--s1);border:1px solid var(--border2);border-radius:16px;padding:32px;max-height:70vh;overflow-y:auto}
 .lbl{font-size:12px;color:var(--muted);margin-bottom:6px;letter-spacing:.05em;text-transform:uppercase;font-weight:500}
 .inp{width:100%;padding:11px 14px;background:var(--s2);border:1px solid var(--border);border-radius:var(--r2);color:var(--text);font-size:14px;outline:none;transition:border .2s;margin-bottom:14px}
@@ -53,19 +48,13 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 .tab-toggle{display:flex;background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:4px;margin-bottom:0}
 .tab-btn{flex:1;padding:9px;font-size:13px;font-weight:600;background:transparent;border:none;color:var(--muted);cursor:pointer;border-radius:7px;transition:all .2s}
 .tab-btn.active{background:var(--purple);color:#fff}
-.inp-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.login-sub{color:var(--muted);font-size:14px;margin-bottom:24px}
-
-/* ── SHELL ── */
 #app{display:none}
 .shell{display:flex;min-height:100vh}
-
-/* ── SIDEBAR ── */
 .sidebar{width:240px;min-height:100vh;background:var(--s1);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:50}
 .sb-logo{padding:24px 20px 20px;font-size:20px;font-weight:700;letter-spacing:-0.5px;border-bottom:1px solid var(--border)}
 .sb-logo span{color:var(--purple)}
 .sb-section{padding:12px 12px 4px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:600}
-.nav{padding:3px 8px;display:flex;align-items:center;gap:10px;border-radius:var(--r2);cursor:pointer;color:var(--muted2);font-size:13.5px;font-weight:500;margin:1px 8px;padding:9px 12px;transition:all .15s;border:1px solid transparent}
+.nav{padding:9px 12px;display:flex;align-items:center;gap:10px;border-radius:var(--r2);cursor:pointer;color:var(--muted2);font-size:13.5px;font-weight:500;margin:1px 8px;transition:all .15s;border:1px solid transparent}
 .nav svg{width:16px;height:16px;flex-shrink:0;opacity:.7}
 .nav:hover{background:var(--s3);color:var(--text)}
 .nav.active{background:var(--purple-glow);color:var(--purple2);border-color:var(--border2)}
@@ -77,8 +66,6 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 .user-role{font-size:11px;color:var(--muted)}
 .sign-out{width:100%;padding:8px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:var(--r2);cursor:pointer;font-size:12px;transition:all .2s}
 .sign-out:hover{border-color:var(--red);color:var(--red)}
-
-/* ── MAIN ── */
 .main{margin-left:240px;flex:1;min-height:100vh}
 .topbar{padding:20px 28px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--s1);position:sticky;top:0;z-index:40;backdrop-filter:blur(8px)}
 .page-title{font-size:20px;font-weight:700;letter-spacing:-.3px}
@@ -87,11 +74,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
 .content{padding:24px 28px}
-
-/* ── PAGES ── */
 .page{display:none}.page.show{display:block}
-
-/* ── STAT CARDS ── */
 .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
 .stat{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:20px;position:relative;overflow:hidden;transition:border .2s}
 .stat:hover{border-color:var(--border2)}
@@ -100,20 +83,10 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 .stat-sub{font-size:12px;color:var(--muted)}
 .stat-icon{position:absolute;right:16px;top:16px;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center}
 .stat-icon svg{width:18px;height:18px}
-.s-green .stat-value{color:var(--green2)}
-.s-green .stat-icon{background:rgba(34,208,122,.1)}
-.s-green .stat-icon svg{color:var(--green)}
-.s-red .stat-value{color:var(--red2)}
-.s-red .stat-icon{background:rgba(240,82,82,.1)}
-.s-red .stat-icon svg{color:var(--red)}
-.s-purple .stat-value{color:var(--purple2)}
-.s-purple .stat-icon{background:var(--purple-glow)}
-.s-purple .stat-icon svg{color:var(--purple)}
-.s-amber .stat-value{color:var(--amber2)}
-.s-amber .stat-icon{background:rgba(245,158,11,.1)}
-.s-amber .stat-icon svg{color:var(--amber)}
-
-/* ── CHARTS ── */
+.s-green .stat-value{color:var(--green2)}.s-green .stat-icon{background:rgba(34,208,122,.1)}.s-green .stat-icon svg{color:var(--green)}
+.s-red .stat-value{color:var(--red2)}.s-red .stat-icon{background:rgba(240,82,82,.1)}.s-red .stat-icon svg{color:var(--red)}
+.s-purple .stat-value{color:var(--purple2)}.s-purple .stat-icon{background:var(--purple-glow)}.s-purple .stat-icon svg{color:var(--purple)}
+.s-amber .stat-value{color:var(--amber2)}.s-amber .stat-icon{background:rgba(245,158,11,.1)}.s-amber .stat-icon svg{color:var(--amber)}
 .charts-row{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:20px}
 .chart-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:20px}
 .card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
@@ -121,8 +94,6 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 .legend{display:flex;gap:14px}
 .leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)}
 .leg-dot{width:8px;height:8px;border-radius:2px}
-
-/* ── TABLE CARD ── */
 .tcard{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:20px}
 .thead{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--border)}
 .tcard-title{font-size:14px;font-weight:600}
@@ -143,8 +114,6 @@ tr:hover td{background:rgba(255,255,255,.018)}
 .pbtn:hover:not(:disabled){background:var(--s3);border-color:var(--border2);color:var(--text)}
 .pbtn:disabled{opacity:.3;cursor:not-allowed}
 .pbtn.cur{background:var(--purple-glow);border-color:var(--purple);color:var(--purple2)}
-
-/* ── BADGES ── */
 .badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.03em}
 .b-green{background:rgba(34,208,122,.12);color:#4ade80}
 .b-red{background:rgba(240,82,82,.12);color:#fb7185}
@@ -154,18 +123,11 @@ tr:hover td{background:rgba(255,255,255,.018)}
 .b-gray{background:rgba(255,255,255,.07);color:var(--muted2)}
 .b-active{background:rgba(34,208,122,.1);color:#4ade80}
 .b-inactive{background:rgba(240,82,82,.1);color:#fb7185}
-
-/* ── ACTION BUTTONS ── */
 .abtn{padding:5px 12px;background:transparent;border:1px solid var(--border);border-radius:var(--r2);color:var(--muted2);font-size:12px;cursor:pointer;transition:all .2s}
 .abtn:hover{border-color:var(--border2);color:var(--text)}
 .abtn.d:hover{border-color:var(--red);color:var(--red)}
-.abtn.r:hover{border-color:var(--green);color:var(--green)}
-
-/* ── NEW TRANSACTION BTN ── */
 .new-btn{display:flex;align-items:center;gap:6px;padding:9px 16px;background:var(--purple);border:none;border-radius:var(--r2);color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:opacity .2s}
 .new-btn:hover{opacity:.85}
-
-/* ── ANOMALY CARDS ── */
 .anomaly-grid{display:grid;gap:12px}
 .anom{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;transition:border .2s}
 .anom:hover{border-color:var(--border2)}
@@ -175,11 +137,8 @@ tr:hover td{background:rgba(255,255,255,.018)}
 .anom-meta{font-size:12px;color:var(--muted);margin-top:4px}
 .anom-stats{font-size:11px;color:var(--muted);margin-top:6px}
 .z-score{font-size:26px;font-weight:700;letter-spacing:-1px;text-align:right}
-.z-high{color:var(--red2)}
-.z-low{color:var(--amber2)}
+.z-high{color:var(--red2)}.z-low{color:var(--amber2)}
 .anom-amount{font-size:14px;font-weight:600;text-align:right;margin-top:2px}
-
-/* ── MODAL ── */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:200;backdrop-filter:blur(2px)}
 .overlay.show{display:flex}
 .modal{background:var(--s1);border:1px solid var(--border2);border-radius:16px;padding:28px;width:460px;max-height:90vh;overflow-y:auto}
@@ -191,46 +150,26 @@ tr:hover td{background:rgba(255,255,255,.018)}
 .m-submit{padding:10px 22px;background:var(--purple);border:none;border-radius:var(--r2);color:#fff;font-size:14px;font-weight:600;cursor:pointer}
 .m-submit:hover{opacity:.85}
 .mrow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-
-/* ── TOAST ── */
 .toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:500;z-index:300;display:none;animation:slide-in .2s ease}
 @keyframes slide-in{from{transform:translateY(8px);opacity:0}to{transform:translateY(0);opacity:1}}
 .toast.s{background:#1a3a28;border:1px solid rgba(34,208,122,.3);color:#4ade80}
 .toast.e{background:#3a1a1a;border:1px solid rgba(240,82,82,.3);color:#fb7185}
-
-/* ── EMPTY/LOADING ── */
 .loader,.empty-state{text-align:center;padding:48px;color:var(--muted);font-size:13px}
 .spin{display:inline-block;width:20px;height:20px;border:2px solid var(--border2);border-top-color:var(--purple);border-radius:50%;animation:spin .6s linear infinite;margin-bottom:12px}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* ── AUDIT ACTION COLORS ── */
 .a-CREATE{color:#4ade80}.a-UPDATE{color:var(--amber2)}.a-DELETE{color:#fb7185}
 .a-RESTORE{color:var(--blue2)}.a-LOGIN{color:var(--purple2)}.a-LOGOUT{color:var(--muted2)}
-
-/* ── CATEGORY BARS ── */
-.cat-bar-wrap{margin-bottom:12px}
-.cat-bar-head{display:flex;justify-content:space-between;margin-bottom:5px;font-size:12px}
-.cat-bar-name{color:var(--muted2)}
-.cat-bar-val{font-weight:600}
-.cat-bar-bg{height:5px;background:var(--s3);border-radius:3px}
-.cat-bar-fill{height:100%;border-radius:3px;transition:width .6s ease}
-
-/* ── WEEKLY BARS ── */
 .weekly-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:4px}
 .week-bar{background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center}
 .week-label{font-size:11px;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.06em}
-.week-val-wrap{margin-bottom:4px}
 .week-income{font-size:13px;font-weight:600;color:var(--green2)}
 .week-expense{font-size:13px;font-weight:600;color:var(--red2)}
 .week-net{font-size:11px;color:var(--muted);margin-top:4px}
-
-/* ── RESPONSIVE ── */
 @media(max-width:1100px){.stat-grid{grid-template-columns:repeat(2,1fr)}.charts-row{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<!-- ══ LOGIN ══════════════════════════════════════════════════════════════════ -->
 <div id="login">
 <div class="login-wrap">
   <div class="login-logo">Fin<span>Track</span></div>
@@ -241,8 +180,6 @@ tr:hover td{background:rgba(255,255,255,.018)}
     <button class="tab-btn" id="tabSignUp" onclick="switchTab('signup')">Create Account</button>
   </div>
   <div class="login-card">
-
-    <!-- SIGN IN FORM -->
     <div class="form-section show" id="formSignIn">
       <div class="lbl">Email address</div>
       <input class="inp" id="lemail" type="email" value="admin@fintrack.io"/>
@@ -250,7 +187,7 @@ tr:hover td{background:rgba(255,255,255,.018)}
       <div class="pwd-wrap">
         <input class="inp" id="lpwd" type="password" value="Password@123" onkeydown="if(event.key==='Enter')doLogin()"/>
         <button class="eye-btn" type="button" onclick="togglePwd('lpwd',this)" tabindex="-1">
-          <svg id="eye-lpwd" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
         </button>
       </div>
       <button class="login-btn" onclick="doLogin()">Sign in to dashboard</button>
@@ -261,13 +198,9 @@ tr:hover td{background:rgba(255,255,255,.018)}
         <button class="q-btn" onclick="qlogin('viewer')">Viewer</button>
       </div>
     </div>
-
-    <!-- SIGN UP FORM -->
     <div class="form-section" id="formSignUp">
       <div class="admin-note">
-        <strong>Demo system:</strong> New accounts are provisioned by an admin.
-        Fill in your details below — the system will register you with
-        <strong>Viewer</strong> access by default. An admin can upgrade your role later.
+        <strong>Demo system:</strong> New accounts are provisioned with <strong>Viewer</strong> access by default.
       </div>
       <div class="lbl">Full name</div>
       <input class="inp" id="suName" type="text" placeholder="Jane Smith"/>
@@ -292,23 +225,16 @@ tr:hover td{background:rgba(255,255,255,.018)}
         <option value="VIEWER">Viewer — read-only access</option>
         <option value="ANALYST">Analyst — view &amp; manage records</option>
       </select>
-      <div style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r2);padding:11px 14px;font-size:12px;color:var(--muted);margin-bottom:14px">
-        Admin role requires manual assignment by an existing administrator.
-      </div>
       <button class="login-btn" onclick="doSignUp()">Create Account</button>
       <div class="err" id="suerr"></div>
       <div class="succ" id="susucc"></div>
     </div>
-
   </div>
 </div>
 </div>
 
-<!-- ══ APP ════════════════════════════════════════════════════════════════════ -->
 <div id="app">
 <div class="shell">
-
-  <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="sb-logo">Fin<span>Track</span></div>
     <div style="padding:16px 0;flex:1;overflow-y:auto">
@@ -347,19 +273,17 @@ tr:hover td{background:rgba(255,255,255,.018)}
     </div>
   </div>
 
-  <!-- MAIN -->
   <div class="main">
     <div class="topbar">
       <div class="page-title" id="ptitle">Dashboard</div>
       <div class="topbar-right">
-        <div class="api-badge"><div class="dot"></div>API Connected</div>
+        <div class="api-badge"><div class="dot"></div>Mock API Active</div>
       </div>
     </div>
     <div class="content">
 
-      <!-- ══ DASHBOARD PAGE ══ -->
       <div class="page show" id="page-dash">
-        <div class="stat-grid" id="statGrid"><div class="loader"><div class="spin"></div><br>Loading stats...</div></div>
+        <div class="stat-grid" id="statGrid"></div>
         <div class="charts-row">
           <div class="chart-card">
             <div class="card-head">
@@ -382,22 +306,19 @@ tr:hover td{background:rgba(255,255,255,.018)}
             <div class="thead"><div class="tcard-title">Recent Activity</div></div>
             <table>
               <thead><tr><th>Date</th><th>Description</th><th>Amount</th></tr></thead>
-              <tbody id="recentBody"><tr><td colspan="3" class="loader">Loading...</td></tr></tbody>
+              <tbody id="recentBody"></tbody>
             </table>
           </div>
           <div class="chart-card">
             <div class="card-head"><span class="card-title">Weekly Cash Flow</span></div>
-            <div class="weekly-row" id="weeklyRow"><div class="loader" style="grid-column:1/-1">Loading...</div></div>
+            <div class="weekly-row" id="weeklyRow"></div>
           </div>
         </div>
       </div>
 
-      <!-- ══ TRANSACTIONS PAGE ══ -->
       <div class="page" id="page-tx">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-          <div>
-            <div style="font-size:13px;color:var(--muted)" id="txSubtitle">All financial records</div>
-          </div>
+          <div style="font-size:13px;color:var(--muted)" id="txSubtitle">All financial records</div>
           <button class="new-btn" onclick="openTxModal()" id="newTxBtn">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             New Transaction
@@ -423,12 +344,9 @@ tr:hover td{background:rgba(255,255,255,.018)}
           </div>
           <table>
             <thead>
-              <tr>
-                <th>Date</th><th>Description</th><th>Category</th>
-                <th>Type</th><th>Amount</th><th>Actions</th>
-              </tr>
+              <tr><th>Date</th><th>Description</th><th>Category</th><th>Type</th><th>Amount</th><th>Actions</th></tr>
             </thead>
-            <tbody id="txBody"><tr><td colspan="6" class="loader"><div class="spin"></div></td></tr></tbody>
+            <tbody id="txBody"></tbody>
           </table>
           <div class="tfoot">
             <span class="page-info" id="txPageInfo"></span>
@@ -437,27 +355,24 @@ tr:hover td{background:rgba(255,255,255,.018)}
         </div>
       </div>
 
-      <!-- ══ ANOMALIES PAGE ══ -->
       <div class="page" id="page-anom">
         <div style="background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           <span style="font-size:13px;color:var(--muted2)">Transactions deviating more than <strong style="color:var(--text)">2 standard deviations</strong> from their category average. Sorted by z-score.</span>
         </div>
-        <div class="anomaly-grid" id="anomGrid"><div class="loader"><div class="spin"></div><br>Analyzing transactions...</div></div>
+        <div class="anomaly-grid" id="anomGrid"></div>
       </div>
 
-      <!-- ══ USERS PAGE ══ -->
       <div class="page" id="page-users">
         <div class="tcard">
           <div class="thead"><div class="tcard-title">All users</div></div>
           <table>
             <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Transactions</th><th>Joined</th></tr></thead>
-            <tbody id="usersBody"><tr><td colspan="6" class="loader"><div class="spin"></div></td></tr></tbody>
+            <tbody id="usersBody"></tbody>
           </table>
         </div>
       </div>
 
-      <!-- ══ AUDIT PAGE ══ -->
       <div class="page" id="page-audit">
         <div class="tcard">
           <div class="thead">
@@ -481,7 +396,7 @@ tr:hover td{background:rgba(255,255,255,.018)}
           </div>
           <table>
             <thead><tr><th>Time</th><th>Action</th><th>Entity</th><th>Record ID</th><th>Performed by</th></tr></thead>
-            <tbody id="auditBody"><tr><td colspan="5" class="loader"><div class="spin"></div></td></tr></tbody>
+            <tbody id="auditBody"></tbody>
           </table>
           <div class="tfoot">
             <span class="page-info" id="auditPageInfo"></span>
@@ -495,7 +410,6 @@ tr:hover td{background:rgba(255,255,255,.018)}
 </div>
 </div>
 
-<!-- ══ MODAL ══════════════════════════════════════════════════════════════════ -->
 <div class="overlay" id="txModal">
   <div class="modal">
     <h3>New Transaction</h3>
@@ -515,7 +429,7 @@ tr:hover td{background:rgba(255,255,255,.018)}
         <div class="lbl">Category</div>
         <select class="inp" id="mCat">
           <option>Salary</option><option>Freelance</option><option>Investment</option>
-          <option>Food & Dining</option><option>Transport</option><option>Utilities</option>
+          <option>Food &amp; Dining</option><option>Transport</option><option>Utilities</option>
           <option>Healthcare</option><option>Entertainment</option><option>Shopping</option>
           <option>Education</option><option>Rent</option><option>Insurance</option><option>Other</option>
         </select>
@@ -543,35 +457,267 @@ tr:hover td{background:rgba(255,255,255,.018)}
 <div class="toast" id="toast"></div>
 
 <script>
+const MOCK_USERS = [
+  {id:'u1',name:'Admin User',email:'admin@fintrack.io',password:'Password@123',role:'ADMIN',status:'ACTIVE',createdAt:'2024-01-01T00:00:00Z',_count:{transactions:45}},
+  {id:'u2',name:'Analyst User',email:'analyst@fintrack.io',password:'Password@123',role:'ANALYST',status:'ACTIVE',createdAt:'2024-01-15T00:00:00Z',_count:{transactions:30}},
+  {id:'u3',name:'Viewer User',email:'viewer@fintrack.io',password:'Password@123',role:'VIEWER',status:'ACTIVE',createdAt:'2024-02-01T00:00:00Z',_count:{transactions:0}},
+];
 
-const RENDER_URL = 'https://fintrack-rbac-api.onrender.com';
-const BASE = RENDER_URL + '/api/v1';
-let token='', user=null, txPage=1, auditPage=1, dtimer=null;
-let lChart=null, dChart=null;
+function uid(){return Math.random().toString(36).slice(2,10)+Date.now().toString(36);}
 
-const CATS = {email:{admin:'admin@fintrack.io',analyst:'analyst@fintrack.io',viewer:'viewer@fintrack.io'}};
+const CATEGORIES=['Salary','Freelance','Investment','Food & Dining','Transport','Utilities','Healthcare','Entertainment','Shopping','Education','Rent','Insurance','Other'];
+const DESCRIPTIONS={
+  'Salary':['Monthly salary','Annual bonus','Performance pay'],
+  'Freelance':['Web project','Design work','Consulting fee'],
+  'Investment':['Dividend income','Stock sale','MF redemption'],
+  'Food & Dining':['Restaurant dinner','Grocery run','Coffee shop','Lunch delivery'],
+  'Transport':['Fuel','Auto fare','Train ticket','Cab booking'],
+  'Utilities':['Electricity bill','Internet bill','Water bill','Gas bill'],
+  'Healthcare':['Doctor visit','Pharmacy','Lab test','Health insurance'],
+  'Entertainment':['Movie tickets','OTT subscription','Concert','Game purchase'],
+  'Shopping':['Clothing','Electronics','Books','Home goods'],
+  'Education':['Course fee','Books','Online class','Exam fee'],
+  'Rent':['Monthly rent','Security deposit','Maintenance'],
+  'Insurance':['Life insurance','Car insurance','Term plan'],
+  'Other':['Miscellaneous','Transfer','Gift','Donation'],
+};
+
+function genTransactions(){
+  const txs=[];
+  const now=new Date();
+  for(let i=0;i<120;i++){
+    const d=new Date(now);
+    d.setDate(d.getDate()-Math.floor(Math.random()*180));
+    const cat=CATEGORIES[Math.floor(Math.random()*CATEGORIES.length)];
+    const incomeOnly=['Salary','Freelance','Investment'];
+    const expenseOnly=['Food & Dining','Transport','Utilities','Healthcare','Entertainment','Shopping','Education','Rent','Insurance'];
+    let type;
+    if(incomeOnly.includes(cat)) type='INCOME';
+    else if(expenseOnly.includes(cat)) type='EXPENSE';
+    else type=Math.random()>0.5?'INCOME':'EXPENSE';
+    let amount;
+    if(type==='INCOME'){
+      if(cat==='Salary') amount=45000+Math.random()*30000;
+      else if(cat==='Freelance') amount=5000+Math.random()*25000;
+      else amount=1000+Math.random()*50000;
+    } else {
+      if(cat==='Rent') amount=8000+Math.random()*15000;
+      else if(cat==='Healthcare') amount=500+Math.random()*8000;
+      else if(cat==='Shopping') amount=500+Math.random()*10000;
+      else amount=100+Math.random()*3000;
+    }
+    const descs=DESCRIPTIONS[cat]||['Transaction'];
+    txs.push({
+      id:'tx'+uid(),
+      amount:Math.round(amount*100)/100,
+      type,
+      category:cat,
+      date:d.toISOString(),
+      description:descs[Math.floor(Math.random()*descs.length)],
+      notes:'',
+      deleted:false,
+      userId:'u1',
+    });
+  }
+  return txs.sort((a,b)=>new Date(b.date)-new Date(a.date));
+}
+
+const DB={
+  users:[...MOCK_USERS],
+  transactions:genTransactions(),
+  auditLogs:[],
+};
+
+function addAudit(action,entity,entityId,userId){
+  const performer=DB.users.find(u=>u.id===userId)||DB.users[0];
+  DB.auditLogs.unshift({
+    id:'al'+uid(),
+    action,entity,entityId,
+    createdAt:new Date().toISOString(),
+    performedBy:{name:performer.name,role:performer.role},
+  });
+}
+
+const API={
+  login(email,password){
+    const u=DB.users.find(u=>u.email===email&&u.password===password);
+    if(!u) throw new Error('Invalid email or password');
+    addAudit('LOGIN','User',u.id,u.id);
+    return {accessToken:'mock-token-'+u.id,user:{id:u.id,name:u.name,email:u.email,role:u.role}};
+  },
+  createUser(data,adminId){
+    if(DB.users.find(u=>u.email===data.email)) throw new Error('Email already exists');
+    const u={id:'u'+uid(),name:data.name,email:data.email,password:data.password,role:data.role||'VIEWER',status:'ACTIVE',createdAt:new Date().toISOString(),_count:{transactions:0}};
+    DB.users.push(u);
+    addAudit('CREATE','User',u.id,adminId);
+    return u;
+  },
+  getUsers(){
+    return DB.users.map(u=>({...u,password:undefined}));
+  },
+  getSummary(){
+    const active=DB.transactions.filter(t=>!t.deleted);
+    const income=active.filter(t=>t.type==='INCOME');
+    const expenses=active.filter(t=>t.type==='EXPENSE');
+    const totalIncome=income.reduce((s,t)=>s+t.amount,0);
+    const totalExpense=expenses.reduce((s,t)=>s+t.amount,0);
+    return {
+      income:totalIncome,expenses:totalExpense,
+      netBalance:totalIncome-totalExpense,
+      transactionCount:active.length,
+      incomeCount:income.length,expenseCount:expenses.length,
+      avgIncome:income.length?totalIncome/income.length:0,
+      avgExpense:expenses.length?totalExpense/expenses.length:0,
+      savingsRate:totalIncome?((totalIncome-totalExpense)/totalIncome*100).toFixed(1):0,
+    };
+  },
+  getMonthlyTrends(months=6){
+    const result=[];
+    const now=new Date();
+    for(let m=months-1;m>=0;m--){
+      const d=new Date(now.getFullYear(),now.getMonth()-m,1);
+      const label=d.toLocaleString('en-IN',{month:'short',year:'2-digit'});
+      const txs=DB.transactions.filter(t=>{
+        if(t.deleted) return false;
+        const td=new Date(t.date);
+        return td.getFullYear()===d.getFullYear()&&td.getMonth()===d.getMonth();
+      });
+      const income=txs.filter(t=>t.type==='INCOME').reduce((s,t)=>s+t.amount,0);
+      const exp=txs.filter(t=>t.type==='EXPENSE').reduce((s,t)=>s+t.amount,0);
+      result.push({month:label,income,expenses:exp,net:income-exp});
+    }
+    return result;
+  },
+  getCategories(){
+    const active=DB.transactions.filter(t=>!t.deleted&&t.type==='EXPENSE');
+    const map={};
+    active.forEach(t=>{map[t.category]=(map[t.category]||0)+t.amount;});
+    const expenses=Object.entries(map).map(([category,total])=>({category,total})).sort((a,b)=>b.total-a.total);
+    return {expenses};
+  },
+  getRecent(limit=8){
+    return DB.transactions.filter(t=>!t.deleted).slice(0,limit);
+  },
+  getWeeklyTrends(){
+    const result=[];
+    const now=new Date();
+    for(let w=3;w>=0;w--){
+      const start=new Date(now);
+      start.setDate(start.getDate()-w*7-6);
+      start.setHours(0,0,0,0);
+      const end=new Date(start);
+      end.setDate(end.getDate()+6);
+      end.setHours(23,59,59,999);
+      const txs=DB.transactions.filter(t=>{
+        if(t.deleted) return false;
+        const td=new Date(t.date);
+        return td>=start&&td<=end;
+      });
+      const income=txs.filter(t=>t.type==='INCOME').reduce((s,t)=>s+t.amount,0);
+      const exp=txs.filter(t=>t.type==='EXPENSE').reduce((s,t)=>s+t.amount,0);
+      const label=w===0?'This Wk':w===1?'Last Wk':`W-${w+1}`;
+      result.push({week:label,income,expenses:exp,net:income-exp});
+    }
+    return result;
+  },
+  getTransactions({page=1,limit=12,type='',search='',sortBy='date',sortOrder='desc'}={}){
+    let data=DB.transactions.filter(t=>!t.deleted);
+    if(type) data=data.filter(t=>t.type===type);
+    if(search) data=data.filter(t=>(t.description||'').toLowerCase().includes(search.toLowerCase())||(t.category||'').toLowerCase().includes(search.toLowerCase()));
+    data.sort((a,b)=>{
+      let va=a[sortBy],vb=b[sortBy];
+      if(sortBy==='date'){va=new Date(va);vb=new Date(vb);}
+      if(sortOrder==='asc') return va>vb?1:-1;
+      return va<vb?1:-1;
+    });
+    const total=data.length;
+    const totalPages=Math.max(1,Math.ceil(total/limit));
+    const slice=data.slice((page-1)*limit,page*limit);
+    return {data:slice,pagination:{page,limit,total,totalPages,hasPrev:page>1,hasNext:page<totalPages}};
+  },
+  createTransaction(data,userId){
+    const t={id:'tx'+uid(),...data,deleted:false,userId,date:data.date||new Date().toISOString()};
+    DB.transactions.unshift(t);
+    addAudit('CREATE','Transaction',t.id,userId);
+    return t;
+  },
+  deleteTransaction(id,userId){
+    const t=DB.transactions.find(t=>t.id===id);
+    if(!t) throw new Error('Transaction not found');
+    t.deleted=true;
+    addAudit('DELETE','Transaction',id,userId);
+    return t;
+  },
+  restoreTransaction(id,userId){
+    const t=DB.transactions.find(t=>t.id===id);
+    if(!t) throw new Error('Transaction not found');
+    t.deleted=false;
+    addAudit('RESTORE','Transaction',id,userId);
+    return t;
+  },
+  getAnomalies(){
+    const active=DB.transactions.filter(t=>!t.deleted);
+    const catMap={};
+    active.forEach(t=>{
+      const k=t.category+'|'+t.type;
+      if(!catMap[k]) catMap[k]=[];
+      catMap[k].push(t.amount);
+    });
+    const anomalies=[];
+    active.forEach(t=>{
+      const k=t.category+'|'+t.type;
+      const vals=catMap[k];
+      if(vals.length<3) return;
+      const mean=vals.reduce((s,v)=>s+v,0)/vals.length;
+      const stdDev=Math.sqrt(vals.reduce((s,v)=>s+(v-mean)**2,0)/vals.length);
+      if(stdDev===0) return;
+      const z=(t.amount-mean)/stdDev;
+      const absZ=Math.abs(z);
+      if(absZ>2){
+        anomalies.push({...t,zScore:absZ.toFixed(2),mean:Math.round(mean),stdDev:Math.round(stdDev),deviation:z>0?'unusually_high':'unusually_low'});
+      }
+    });
+    return anomalies.sort((a,b)=>b.zScore-a.zScore).slice(0,10);
+  },
+  getAudit({page=1,limit=15,action='',entity=''}={}){
+    let data=[...DB.auditLogs];
+    if(action) data=data.filter(l=>l.action===action);
+    if(entity) data=data.filter(l=>l.entity===entity);
+    const total=data.length;
+    const totalPages=Math.max(1,Math.ceil(total/limit));
+    const slice=data.slice((page-1)*limit,page*limit);
+    return {data:slice,pagination:{page,limit,total,totalPages,hasPrev:page>1,hasNext:page<totalPages}};
+  },
+};
+
+let currentUser=null,txPage=1,auditPage=1,dtimer=null,lChart=null,dChart=null;
 
 function qlogin(r){
-  document.getElementById('lemail').value=CATS.email[r];
+  const map={admin:'admin@fintrack.io',analyst:'analyst@fintrack.io',viewer:'viewer@fintrack.io'};
+  document.getElementById('lemail').value=map[r];
   document.getElementById('lpwd').value='Password@123';
   doLogin();
 }
 
-async function doLogin(){
-  const e=document.getElementById('lemail').value, p=document.getElementById('lpwd').value;
+function doLogin(){
+  const e=document.getElementById('lemail').value.trim();
+  const p=document.getElementById('lpwd').value;
   const err=document.getElementById('lerr');
   err.style.display='none';
   try{
-    const d=await req('/auth/login','POST',{email:e,password:p},true);
-    token=d.data.accessToken; user=d.data.user;
+    const d=API.login(e,p);
+    currentUser=d.user;
     document.getElementById('login').style.display='none';
     document.getElementById('app').style.display='block';
-    document.getElementById('uname').textContent=user.name;
-    document.getElementById('urole').textContent=user.role;
-    document.getElementById('avt').textContent=user.name.split(' ').map(x=>x[0]).join('').slice(0,2);
-    if(user.role!=='ADMIN'){
+    document.getElementById('uname').textContent=currentUser.name;
+    document.getElementById('urole').textContent=currentUser.role;
+    document.getElementById('avt').textContent=currentUser.name.split(' ').map(x=>x[0]).join('').slice(0,2);
+    if(currentUser.role!=='ADMIN'){
       document.getElementById('navUsers').style.display='none';
       document.getElementById('navAudit').style.display='none';
+    } else {
+      document.getElementById('navUsers').style.display='';
+      document.getElementById('navAudit').style.display='';
     }
     initDash();
   }catch(ex){
@@ -581,36 +727,12 @@ async function doLogin(){
 }
 
 function doLogout(){
-  token=''; user=null;
+  if(currentUser) addAudit('LOGOUT','User',currentUser.id,currentUser.id);
+  currentUser=null;
   document.getElementById('app').style.display='none';
   document.getElementById('login').style.display='flex';
   if(lChart){lChart.destroy();lChart=null;}
   if(dChart){dChart.destroy();dChart=null;}
-}
-async function req(path,method='GET',body=null,noAuth=false){
-  try {
-    const h={'Content-Type':'application/json'};
-    if(!noAuth && token) h['Authorization']='Bearer '+token;
-
-    const r = await fetch(BASE+path,{
-      method,
-      headers:h,
-      body:body?JSON.stringify(body):null
-    });
-
-    if(!r.ok){
-      const text = await r.text();
-      throw new Error("HTTP "+r.status+" - "+text);
-    }
-
-    const d = await r.json();
-    if(!d.success) throw new Error(d.message||'Request failed');
-
-    return d;
-
-  } catch(e){
-    throw new Error("Network/CORS error: " + e.message);
-  }
 }
 
 function goPage(name,el){
@@ -626,23 +748,17 @@ function goPage(name,el){
   if(name==='audit') loadAudit();
 }
 
-/* ═══ DASHBOARD ═══════════════════════════════════════════════════════════════ */
-async function initDash(){
-  try{
-    const [sum,trends,cats,recent,weekly]=await Promise.all([
-      req('/dashboard/summary'),
-      req('/dashboard/trends/monthly?months=6'),
-      req('/dashboard/categories'),
-      req('/dashboard/recent?limit=8'),
-      req('/dashboard/trends/weekly')
-    ]);
-    renderStats(sum.data);
-    renderLine(trends.data);
-    renderDonut(cats.data.expenses);
-    renderRecent(recent.data);
-    renderWeekly(weekly.data);
-    renderCatBars(cats.data.expenses);
-  }catch(ex){toast(ex.message,'e');}
+function initDash(){
+  const sum=API.getSummary();
+  const trends=API.getMonthlyTrends(6);
+  const cats=API.getCategories();
+  const recent=API.getRecent(8);
+  const weekly=API.getWeeklyTrends();
+  renderStats(sum);
+  renderLine(trends);
+  renderDonut(cats.expenses);
+  renderRecent(recent);
+  renderWeekly(weekly);
 }
 
 function renderStats(d){
@@ -731,77 +847,57 @@ function renderWeekly(data){
     <div class="week-label">${w.week}</div>
     <div class="week-income">+${fmtMoney(w.income)}</div>
     <div class="week-expense">-${fmtMoney(w.expenses)}</div>
-    <div class="week-net" style="color:${w.net>=0?'var(--green)':'var(--red)'}">
-      net ${fmtMoney(w.net)}
-    </div>
+    <div class="week-net" style="color:${w.net>=0?'var(--green)':'var(--red)'}">net ${fmtMoney(w.net)}</div>
   </div>`).join('');
 }
 
-function renderCatBars(data){}
-
-/* ═══ TRANSACTIONS ════════════════════════════════════════════════════════════ */
-async function loadTx(){
+function loadTx(){
   const type=document.getElementById('ftType').value;
   const search=document.getElementById('ftSearch').value;
   const sortRaw=document.getElementById('ftSort').value.split('|');
-  let qs=`?page=${txPage}&limit=12&sortBy=${sortRaw[0]}&sortOrder=${sortRaw[1]}`;
-  if(type) qs+=`&type=${type}`;
-  if(search) qs+=`&search=${encodeURIComponent(search)}`;
-  document.getElementById('txBody').innerHTML='<tr><td colspan="6" class="loader"><div class="spin"></div></td></tr>';
-  try{
-    const r=await req('/transactions'+qs);
-    const role=user.role;
-    document.getElementById('txCount').textContent=`${r.pagination.total} records`;
-    document.getElementById('txSubtitle').textContent=`Showing ${r.data.length} of ${r.pagination.total} transactions`;
-    document.getElementById('txBody').innerHTML=r.data.map(t=>`
-    <tr>
-      <td style="color:var(--muted);font-size:12px">${fmtDate(t.date)}</td>
-      <td>
-        <div style="font-weight:500">${t.description||'—'}</div>
-        ${t.notes?`<div style="font-size:11px;color:var(--muted);margin-top:2px">${t.notes}</div>`:''}
-      </td>
-      <td><span class="badge b-gray">${t.category}</span></td>
-      <td><span class="badge ${t.type==='INCOME'?'b-green':'b-red'}">${t.type}</span></td>
-      <td style="color:${t.type==='INCOME'?'var(--green2)':'var(--red2)'};font-weight:600">
-        ${t.type==='INCOME'?'+':'-'}${fmtMoney(t.amount)}
-      </td>
-      <td>
-        ${role!=='VIEWER'?`<button class="abtn d" onclick="deleteTx('${t.id}')">Delete</button>`:'<span style="color:var(--muted);font-size:12px">—</span>'}
-        ${role==='ADMIN'?`<button class="abtn" onclick="restoreTx('${t.id}')" style="margin-left:4px;display:none" id="rb-${t.id}">Restore</button>`:''}
-      </td>
-    </tr>`).join('')||'<tr><td colspan="6" class="empty-state">No transactions found</td></tr>';
-    renderPager('tx',r.pagination,()=>{txPage=r.pagination.page;});
-  }catch(ex){toast(ex.message,'e');}
+  const r=API.getTransactions({page:txPage,limit:12,type,search,sortBy:sortRaw[0],sortOrder:sortRaw[1]});
+  const role=currentUser.role;
+  document.getElementById('txCount').textContent=`${r.pagination.total} records`;
+  document.getElementById('txSubtitle').textContent=`Showing ${r.data.length} of ${r.pagination.total} transactions`;
+  document.getElementById('txBody').innerHTML=r.data.map(t=>`
+  <tr>
+    <td style="color:var(--muted);font-size:12px">${fmtDate(t.date)}</td>
+    <td>
+      <div style="font-weight:500">${t.description||'—'}</div>
+      ${t.notes?`<div style="font-size:11px;color:var(--muted);margin-top:2px">${t.notes}</div>`:''}
+    </td>
+    <td><span class="badge b-gray">${t.category}</span></td>
+    <td><span class="badge ${t.type==='INCOME'?'b-green':'b-red'}">${t.type}</span></td>
+    <td style="color:${t.type==='INCOME'?'var(--green2)':'var(--red2)'};font-weight:600">
+      ${t.type==='INCOME'?'+':'-'}${fmtMoney(t.amount)}
+    </td>
+    <td>
+      ${role!=='VIEWER'?`<button class="abtn d" onclick="deleteTx('${t.id}')">Delete</button>`:'<span style="color:var(--muted);font-size:12px">—</span>'}
+    </td>
+  </tr>`).join('')||'<tr><td colspan="6" class="empty-state">No transactions found</td></tr>';
+  renderPager('tx',r.pagination);
 }
 
-function renderPager(prefix,p,cb){
-  document.getElementById(prefix+'PageInfo').textContent=`Page ${p.page} of ${p.totalPages||1} · ${p.total} total`;
+function renderPager(prefix,p){
+  document.getElementById(prefix+'PageInfo').textContent=`Page ${p.page} of ${p.totalPages} · ${p.total} total`;
   const wrap=document.getElementById(prefix+'PBtns');
+  const prevFn=prefix==='tx'?`txPage=${p.page-1};loadTx()`:`auditPage=${p.page-1};loadAudit()`;
+  const nextFn=prefix==='tx'?`txPage=${p.page+1};loadTx()`:`auditPage=${p.page+1};loadAudit()`;
   wrap.innerHTML=`
-    <button class="pbtn" ${!p.hasPrev?'disabled':''} onclick="${prefix}Page=${p.page-1};${prefix==='tx'?'loadTx()':'loadAudit()'}">Prev</button>
+    <button class="pbtn" ${!p.hasPrev?'disabled':''} onclick="${prevFn}">Prev</button>
     <button class="pbtn cur">${p.page}</button>
-    <button class="pbtn" ${!p.hasNext?'disabled':''} onclick="${prefix}Page=${p.page+1};${prefix==='tx'?'loadTx()':'loadAudit()'}">Next</button>`;
+    <button class="pbtn" ${!p.hasNext?'disabled':''} onclick="${nextFn}">Next</button>`;
 }
 
-async function deleteTx(id){
-  if(!confirm('Soft-delete this transaction? It can be restored by an Admin.')) return;
-  try{
-    await req(`/transactions/${id}`,'DELETE');
-    toast('Transaction deleted (restorable)','s');
-    loadTx();
-  }catch(ex){toast(ex.message,'e');}
-}
-
-async function restoreTx(id){
-  try{
-    await req(`/transactions/${id}/restore`,'POST');
-    toast('Transaction restored','s');
-    loadTx();
-  }catch(ex){toast(ex.message,'e');}
+function deleteTx(id){
+  if(!confirm('Soft-delete this transaction?')) return;
+  API.deleteTransaction(id,currentUser.id);
+  toast('Transaction deleted','s');
+  loadTx();
 }
 
 function openTxModal(){
-  if(user.role==='VIEWER'){toast('Viewers cannot create transactions','e');return;}
+  if(currentUser.role==='VIEWER'){toast('Viewers cannot create transactions','e');return;}
   document.getElementById('mDate').value=new Date().toISOString().split('T')[0];
   document.getElementById('mAmt').value='';
   document.getElementById('mDesc').value='';
@@ -811,113 +907,96 @@ function openTxModal(){
 
 function closeTxModal(){document.getElementById('txModal').classList.remove('show');}
 
-async function submitTx(){
+function submitTx(){
   const amt=parseFloat(document.getElementById('mAmt').value);
   if(!amt||amt<=0){toast('Enter a valid positive amount','e');return;}
-  try{
-    await req('/transactions','POST',{
-      amount:amt,
-      type:document.getElementById('mType').value,
-      category:document.getElementById('mCat').value,
-      date:document.getElementById('mDate').value,
-      description:document.getElementById('mDesc').value||undefined,
-      notes:document.getElementById('mNotes').value||undefined
-    });
-    closeTxModal();
-    toast('Transaction created successfully','s');
-    loadTx();
-    initDash();
-  }catch(ex){toast(ex.message,'e');}
+  API.createTransaction({
+    amount:amt,
+    type:document.getElementById('mType').value,
+    category:document.getElementById('mCat').value,
+    date:document.getElementById('mDate').value,
+    description:document.getElementById('mDesc').value||undefined,
+    notes:document.getElementById('mNotes').value||undefined,
+  },currentUser.id);
+  closeTxModal();
+  toast('Transaction created successfully','s');
+  loadTx();
+  initDash();
 }
 
-/* ═══ ANOMALIES ═══════════════════════════════════════════════════════════════ */
-async function loadAnom(){
-  document.getElementById('anomGrid').innerHTML='<div class="loader"><div class="spin"></div><br>Analyzing data...</div>';
-  try{
-    const r=await req('/dashboard/anomalies');
-    if(!r.data.length){
-      document.getElementById('anomGrid').innerHTML='<div class="empty-state" style="padding:60px;text-align:center;color:var(--muted)">No anomalies detected — spending patterns look normal</div>';
-      return;
-    }
-    document.getElementById('anomGrid').innerHTML=r.data.map(a=>`
-    <div class="anom ${a.deviation==='unusually_high'?'high':'low'}">
-      <div>
-        <div class="anom-cat">${a.category} <span class="badge ${a.type==='INCOME'?'b-green':'b-red'}" style="font-size:10px;vertical-align:middle">${a.type}</span></div>
-        <div style="font-size:13px;color:var(--muted2);margin-top:4px">${a.description||'No description'}</div>
-        <div class="anom-meta">${fmtDate(a.date)}</div>
-        <div class="anom-stats">Category mean: ${fmtMoney(a.mean)} · Std dev: ${fmtMoney(a.stdDev)}</div>
-      </div>
-      <div>
-        <div class="z-score ${a.deviation==='unusually_high'?'z-high':'z-low'}">z=${a.zScore}</div>
-        <div class="anom-amount" style="color:${a.type==='INCOME'?'var(--green2)':'var(--red2)'}">${fmtMoney(a.amount)}</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px;text-align:right">${a.deviation.replace('_',' ')}</div>
-      </div>
-    </div>`).join('');
-  }catch(ex){toast(ex.message,'e');}
+function loadAnom(){
+  const data=API.getAnomalies();
+  if(!data.length){
+    document.getElementById('anomGrid').innerHTML='<div class="empty-state" style="padding:60px;text-align:center;color:var(--muted)">No anomalies detected — spending patterns look normal</div>';
+    return;
+  }
+  document.getElementById('anomGrid').innerHTML=data.map(a=>`
+  <div class="anom ${a.deviation==='unusually_high'?'high':'low'}">
+    <div>
+      <div class="anom-cat">${a.category} <span class="badge ${a.type==='INCOME'?'b-green':'b-red'}" style="font-size:10px;vertical-align:middle">${a.type}</span></div>
+      <div style="font-size:13px;color:var(--muted2);margin-top:4px">${a.description||'No description'}</div>
+      <div class="anom-meta">${fmtDate(a.date)}</div>
+      <div class="anom-stats">Category mean: ${fmtMoney(a.mean)} · Std dev: ${fmtMoney(a.stdDev)}</div>
+    </div>
+    <div>
+      <div class="z-score ${a.deviation==='unusually_high'?'z-high':'z-low'}">z=${a.zScore}</div>
+      <div class="anom-amount" style="color:${a.type==='INCOME'?'var(--green2)':'var(--red2)'}">${fmtMoney(a.amount)}</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px;text-align:right">${a.deviation.replace('_',' ')}</div>
+    </div>
+  </div>`).join('');
 }
 
-/* ═══ USERS ═══════════════════════════════════════════════════════════════════ */
-async function loadUsers(){
-  if(user.role!=='ADMIN'){
+function loadUsers(){
+  if(currentUser.role!=='ADMIN'){
     document.getElementById('usersBody').innerHTML='<tr><td colspan="6" class="empty-state">Admin access required</td></tr>';
     return;
   }
-  try{
-    const r=await req('/users?limit=50');
-    document.getElementById('usersBody').innerHTML=r.data.map(u=>`
-    <tr>
-      <td>
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="width:30px;height:30px;border-radius:50%;background:var(--purple-glow);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--purple2);flex-shrink:0">
-            ${u.name.split(' ').map(x=>x[0]).join('').slice(0,2)}
-          </div>
-          <span style="font-weight:500">${u.name}</span>
+  const data=API.getUsers();
+  document.getElementById('usersBody').innerHTML=data.map(u=>`
+  <tr>
+    <td>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:30px;height:30px;border-radius:50%;background:var(--purple-glow);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--purple2);flex-shrink:0">
+          ${u.name.split(' ').map(x=>x[0]).join('').slice(0,2)}
         </div>
-      </td>
-      <td style="color:var(--muted)">${u.email}</td>
-      <td><span class="badge ${u.role==='ADMIN'?'b-purple':u.role==='ANALYST'?'b-amber':'b-gray'}">${u.role}</span></td>
-      <td><span class="badge ${u.status==='ACTIVE'?'b-active':'b-inactive'}">${u.status}</span></td>
-      <td style="color:var(--muted)">${u._count?.transactions??'—'}</td>
-      <td style="color:var(--muted);font-size:12px">${fmtDate(u.createdAt)}</td>
-    </tr>`).join('');
-  }catch(ex){toast(ex.message,'e');}
+        <span style="font-weight:500">${u.name}</span>
+      </div>
+    </td>
+    <td style="color:var(--muted)">${u.email}</td>
+    <td><span class="badge ${u.role==='ADMIN'?'b-purple':u.role==='ANALYST'?'b-amber':'b-gray'}">${u.role}</span></td>
+    <td><span class="badge ${u.status==='ACTIVE'?'b-active':'b-inactive'}">${u.status}</span></td>
+    <td style="color:var(--muted)">${u._count?.transactions??'—'}</td>
+    <td style="color:var(--muted);font-size:12px">${fmtDate(u.createdAt)}</td>
+  </tr>`).join('');
 }
 
-/* ═══ AUDIT ═══════════════════════════════════════════════════════════════════ */
-async function loadAudit(){
-  if(user.role!=='ADMIN'){
+function loadAudit(){
+  if(currentUser.role!=='ADMIN'){
     document.getElementById('auditBody').innerHTML='<tr><td colspan="5" class="empty-state">Admin access required</td></tr>';
     return;
   }
   const action=document.getElementById('fAAction').value;
   const entity=document.getElementById('fAEntity').value;
-  let qs=`?page=${auditPage}&limit=15`;
-  if(action) qs+=`&action=${action}`;
-  if(entity) qs+=`&entity=${entity}`;
-  document.getElementById('auditBody').innerHTML='<tr><td colspan="5" class="loader"><div class="spin"></div></td></tr>';
-  try{
-    const r=await req('/audit'+qs);
-    document.getElementById('auditBody').innerHTML=r.data.map(l=>`
-    <tr>
-      <td style="color:var(--muted);font-size:12px;white-space:nowrap">${fmtDateTime(l.createdAt)}</td>
-      <td><span class="a-${l.action}" style="font-weight:600;font-size:13px">${l.action}</span></td>
-      <td><span class="badge b-gray">${l.entity}</span></td>
-      <td style="font-family:monospace;font-size:11px;color:var(--muted)">${l.entityId.slice(0,12)}...</td>
-      <td>
-        <div style="display:flex;align-items:center;gap:8px">
-          <div style="width:24px;height:24px;border-radius:50%;background:var(--purple-glow);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:var(--purple2)">
-            ${(l.performedBy?.name||'?').split(' ').map(x=>x[0]).join('').slice(0,2)}
-          </div>
-          <span style="font-size:13px">${l.performedBy?.name||'—'}</span>
-          <span class="badge ${l.performedBy?.role==='ADMIN'?'b-purple':l.performedBy?.role==='ANALYST'?'b-amber':'b-gray'}" style="font-size:10px">${l.performedBy?.role||''}</span>
+  const r=API.getAudit({page:auditPage,limit:15,action,entity});
+  document.getElementById('auditBody').innerHTML=r.data.map(l=>`
+  <tr>
+    <td style="color:var(--muted);font-size:12px;white-space:nowrap">${fmtDateTime(l.createdAt)}</td>
+    <td><span class="a-${l.action}" style="font-weight:600;font-size:13px">${l.action}</span></td>
+    <td><span class="badge b-gray">${l.entity}</span></td>
+    <td style="font-family:monospace;font-size:11px;color:var(--muted)">${l.entityId.slice(0,12)}...</td>
+    <td>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:24px;height:24px;border-radius:50%;background:var(--purple-glow);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:var(--purple2)">
+          ${(l.performedBy?.name||'?').split(' ').map(x=>x[0]).join('').slice(0,2)}
         </div>
-      </td>
-    </tr>`).join('')||'<tr><td colspan="5" class="empty-state">No audit logs found</td></tr>';
-    renderPager('audit',r.pagination,()=>{});
-  }catch(ex){toast(ex.message,'e');}
+        <span style="font-size:13px">${l.performedBy?.name||'—'}</span>
+        <span class="badge ${l.performedBy?.role==='ADMIN'?'b-purple':l.performedBy?.role==='ANALYST'?'b-amber':'b-gray'}" style="font-size:10px">${l.performedBy?.role||''}</span>
+      </div>
+    </td>
+  </tr>`).join('')||'<tr><td colspan="5" class="empty-state">No audit logs found</td></tr>';
+  renderPager('audit',r.pagination);
 }
 
-/* ═══ UTILS ═══════════════════════════════════════════════════════════════════ */
 function fmtMoney(n){
   const v=parseFloat(n)||0;
   if(v>=100000) return '₹'+(v/100000).toFixed(1)+'L';
@@ -929,32 +1008,30 @@ function fmtDateTime(d){return new Date(d).toLocaleString('en-IN',{day:'2-digit'
 
 function toast(msg,type){
   const t=document.getElementById('toast');
-  t.textContent=msg; t.className='toast '+type; t.style.display='block';
-  clearTimeout(t._t); t._t=setTimeout(()=>t.style.display='none',3500);
+  t.textContent=msg;t.className='toast '+type;t.style.display='block';
+  clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3500);
 }
 
-document.getElementById('txModal').addEventListener('click',function(e){if(e.target===this)closeTxModal();});
-
-function togglePwd(id, btn) {
-  const inp = document.getElementById(id);
-  const isText = inp.type === 'text';
-  inp.type = isText ? 'password' : 'text';
-  btn.innerHTML = isText
-    ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
-    : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+function togglePwd(id,btn){
+  const inp=document.getElementById(id);
+  const isText=inp.type==='text';
+  inp.type=isText?'password':'text';
+  btn.innerHTML=isText
+    ?'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
+    :'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
 }
 
 function switchTab(tab){
-  document.getElementById('formSignIn').classList.toggle('show', tab==='signin');
-  document.getElementById('formSignUp').classList.toggle('show', tab==='signup');
-  document.getElementById('tabSignIn').classList.toggle('active', tab==='signin');
-  document.getElementById('tabSignUp').classList.toggle('active', tab==='signup');
+  document.getElementById('formSignIn').classList.toggle('show',tab==='signin');
+  document.getElementById('formSignUp').classList.toggle('show',tab==='signup');
+  document.getElementById('tabSignIn').classList.toggle('active',tab==='signin');
+  document.getElementById('tabSignUp').classList.toggle('active',tab==='signup');
   document.getElementById('lerr').style.display='none';
   document.getElementById('suerr').style.display='none';
   document.getElementById('susucc').style.display='none';
 }
 
-async function doSignUp(){
+function doSignUp(){
   const name=document.getElementById('suName').value.trim();
   const email=document.getElementById('suEmail').value.trim();
   const pwd=document.getElementById('suPwd').value;
@@ -962,27 +1039,17 @@ async function doSignUp(){
   const role=document.getElementById('suRole').value;
   const err=document.getElementById('suerr');
   const succ=document.getElementById('susucc');
-  err.style.display='none'; succ.style.display='none';
-
+  err.style.display='none';succ.style.display='none';
   if(!name){err.textContent='Please enter your full name.';err.style.display='block';return;}
   if(!email){err.textContent='Please enter an email address.';err.style.display='block';return;}
   if(pwd.length<8){err.textContent='Password must be at least 8 characters.';err.style.display='block';return;}
   if(!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/.test(pwd)){
-    err.textContent='Password needs uppercase, lowercase, number and special character (@$!%*?&).';
+    err.textContent='Password needs uppercase, lowercase, number and special character.';
     err.style.display='block';return;
   }
   if(pwd!==pwd2){err.textContent='Passwords do not match.';err.style.display='block';return;}
-
   try{
-    // Auto-authorize via the seeded admin account (demo system)
-    const loginRes=await req('/auth/login','POST',{email:'admin@fintrack.io',password:'Password@123'},true);
-    const adminToken=loginRes.data.accessToken;
-
-    const h={'Content-Type':'application/json','Authorization':'Bearer '+adminToken};
-    const r=await fetch(BASE+'/users',{method:'POST',headers:h,body:JSON.stringify({email,name,password:pwd,role})});
-    const d=await r.json();
-    if(!d.success) throw new Error(d.message);
-
+    API.createUser({email,name,password:pwd,role},'u1');
     succ.textContent='Account created! You can now sign in with '+email;
     succ.style.display='block';
     document.getElementById('suName').value='';
@@ -995,6 +1062,8 @@ async function doSignUp(){
     err.style.display='block';
   }
 }
+
+document.getElementById('txModal').addEventListener('click',function(e){if(e.target===this)closeTxModal();});
 </script>
 </body>
 </html>
