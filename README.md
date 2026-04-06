@@ -16,8 +16,8 @@
   <img src="https://img.shields.io/badge/📚%20Swagger%20Docs-Interactive-85EA2D?style=for-the-badge&logo=swagger&logoColor=black" alt="Swagger Docs"/>
 </a>
 &nbsp;
-<a href="https://creative-crumble-894489.netlify.app" target="_blank">
-  <img src="https://img.shields.io/badge/🖥️%20Live%20Dashboard-Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white" alt="Dashboard"/>
+<a href="https://fintrack-rbac-api.vercel.app/" target="_blank">
+  <img src="https://img.shields.io/badge/🖥️%20Live%20Dashboard-Vercel-00C7B7?style=for-the-badge&logo=Vercel&logoColor=white" alt="Dashboard"/>
 </a>
 
 <br/><br/>
