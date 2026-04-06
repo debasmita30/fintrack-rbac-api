@@ -587,14 +587,30 @@ function doLogout(){
   if(lChart){lChart.destroy();lChart=null;}
   if(dChart){dChart.destroy();dChart=null;}
 }
-
 async function req(path,method='GET',body=null,noAuth=false){
-  const h={'Content-Type':'application/json'};
-  if(!noAuth&&token) h['Authorization']='Bearer '+token;
-  const r=await fetch(BASE+path,{method,headers:h,body:body?JSON.stringify(body):null});
-  const d=await r.json();
-  if(!d.success) throw new Error(d.message||'Request failed');
-  return d;
+  try {
+    const h={'Content-Type':'application/json'};
+    if(!noAuth && token) h['Authorization']='Bearer '+token;
+
+    const r = await fetch(BASE+path,{
+      method,
+      headers:h,
+      body:body?JSON.stringify(body):null
+    });
+
+    if(!r.ok){
+      const text = await r.text();
+      throw new Error("HTTP "+r.status+" - "+text);
+    }
+
+    const d = await r.json();
+    if(!d.success) throw new Error(d.message||'Request failed');
+
+    return d;
+
+  } catch(e){
+    throw new Error("Network/CORS error: " + e.message);
+  }
 }
 
 function goPage(name,el){
