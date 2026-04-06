@@ -150,14 +150,15 @@ async function main() {
   // ── Analyst expense transactions ──────────────────────────────────────────
   for (let i = 0; i < 20; i++) {
     const category = expenseCategories[i % expenseCategories.length];
+    const isSpike = i % 5 === 0;
     transactionData.push({
-      amount: randomBetween(50, 1500),
+      amount: isSpike ? randomBetween(8000, 15000) : randomBetween(50, 400),
       type: "EXPENSE",
       category,
       date: randomDate(sixMonthsAgo, now),
-      description: `${category} expense`,
-      notes: null,
-      tags: JSON.stringify(["expense"]),
+      description: isSpike ? `Unusual ${category} spike` : `${category} expense`,
+      notes: isSpike ? "Flagged as anomaly" : null,
+      tags: JSON.stringify(isSpike ? ["spike", "anomaly"] : ["expense"]),
       createdById: analyst.id,
     });
   }
@@ -179,18 +180,18 @@ async function main() {
   // ── Viewer expense transactions ───────────────────────────────────────────
   for (let i = 0; i < 10; i++) {
     const category = expenseCategories[i % expenseCategories.length];
+    const isSpike = i % 4 === 0;
     transactionData.push({
-      amount: randomBetween(50, 800),
+      amount: isSpike ? randomBetween(8000, 15000) : randomBetween(50, 300),
       type: "EXPENSE",
       category,
       date: randomDate(sixMonthsAgo, now),
-      description: `${category} expense`,
-      notes: null,
-      tags: JSON.stringify(["expense"]),
+      description: isSpike ? `Unusual ${category} spike` : `${category} expense`,
+      notes: isSpike ? "Flagged as anomaly" : null,
+      tags: JSON.stringify(isSpike ? ["spike", "anomaly"] : ["expense"]),
       createdById: viewer.id,
     });
   }
-
   // ── Viewer income transactions ────────────────────────────────────────────
   for (let i = 0; i < 5; i++) {
     transactionData.push({
