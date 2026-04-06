@@ -153,26 +153,19 @@ async function main() {
   console.log(`✅ Created ${transactionData.length} transactions`);
 
   // ── Seed Audit Logs ───────────────────────────────────────────────────────
-  await prisma.auditLog.createMany({
-    data: [
-      {
-        action: "LOGIN",
-        entity: "User",
-        entityId: admin.id,
-        newData: JSON.stringify({ email: admin.email }),
-        performedById: admin.id,
-        ipAddress: "127.0.0.1",
-      },
-      {
-        action: "LOGIN",
-        entity: "User",
-        entityId: analyst.id,
-        newData: JSON.stringify({ email: analyst.email }),
-        performedById: analyst.id,
-        ipAddress: "127.0.0.1",
-      },
-    ],
-  });
+  for (const entry of [
+    { user: admin },
+    { user: analyst },
+  ]) {
+    await prisma.$executeRawUnsafe(
+      `INSERT INTO audit_logs (id, action, entity, entityId, performedById, newData, ipAddress, createdAt) VALUES (?, 'LOGIN', 'User', ?, ?, ?, '127.0.0.1', ?)`,
+      require("uuid").v4(),
+      entry.user.id,
+      entry.user.id,
+      JSON.stringify({ email: entry.user.email }),
+      new Date().toISOString()
+    );
+  }
 
   console.log("✅ Created sample audit logs\n");
 
