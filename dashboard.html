@@ -525,9 +525,7 @@ tr:hover td{background:rgba(255,255,255,.018)}
 
 <script>
 // Auto-detect: if opened via file:// use localhost, if hosted use same origin or env
-const BASE = window.location.protocol === 'file:'
-  ? 'http://localhost:3000/api/v1'
-  : (window.FINTRACK_API_URL || window.location.origin + '/api/v1');
+const BASE = 'https://fintrack-rbac-api.onrender.com';
 let token='', user=null, txPage=1, auditPage=1, dtimer=null;
 let lChart=null, dChart=null;
 
