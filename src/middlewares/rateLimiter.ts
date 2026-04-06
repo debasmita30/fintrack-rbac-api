@@ -7,6 +7,7 @@ const buildLimiter = (max: number, windowMs?: number) =>
     max,
     standardHeaders: true,
     legacyHeaders: false,
+    skip: () => env.NODE_ENV === "production" && process.env.DISABLE_RATE_LIMIT === "true",
     keyGenerator: (req) => ipKeyGenerator(req.ip ?? "unknown"),
     handler: (_req, res) => {
       res.status(429).json({
@@ -18,6 +19,6 @@ const buildLimiter = (max: number, windowMs?: number) =>
     },
   });
 
-export const apiLimiter = buildLimiter(env.RATE_LIMIT_MAX);
-export const authLimiter = buildLimiter(10);
-export const dashboardLimiter = buildLimiter(200);
+export const apiLimiter = buildLimiter(500);
+export const authLimiter = buildLimiter(50);
+export const dashboardLimiter = buildLimiter(500);
