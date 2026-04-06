@@ -575,10 +575,12 @@ async function doLogin(){
     }
     initDash();
   }catch(ex){
-    err.textContent=ex.message||'Login failed';
+    const msg = ex.message||'Account creation failed';
+    err.textContent = msg.includes('Validation failed') 
+      ? 'Password must contain uppercase, lowercase, number and special character (@$!%*?&). Example: Hello@123'
+      : msg;
     err.style.display='block';
   }
-}
 
 function doLogout(){
   token=''; user=null;
@@ -968,7 +970,7 @@ async function doSignUp(){
   if(!email){err.textContent='Please enter an email address.';err.style.display='block';return;}
   if(pwd.length<8){err.textContent='Password must be at least 8 characters.';err.style.display='block';return;}
   if(!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/.test(pwd)){
-    err.textContent='Password needs uppercase, lowercase, number and special character (@$!%*?&).';
+    err.textContent='Password must have: uppercase (A-Z), lowercase (a-z), number (0-9), special character (@$!%*?&). Example: Hello@123';
     err.style.display='block';return;
   }
   if(pwd!==pwd2){err.textContent='Passwords do not match.';err.style.display='block';return;}
