@@ -1,0 +1,482 @@
+{
+  "info": {
+    "name": "FinTrack API",
+    "description": "Finance Data Processing & Access Control Backend\n\n**Setup:**\n1. Run the collection with environment `FinTrack Local`\n2. Login request auto-saves token to env variable\n3. All subsequent requests use it automatically",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000/api/v1" },
+    { "key": "accessToken", "value": "" },
+    { "key": "refreshToken", "value": "" },
+    { "key": "transactionId", "value": "" },
+    { "key": "userId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "🔐 Auth",
+      "item": [
+        {
+          "name": "Login (Admin)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "const r = pm.response.json();",
+            "if(r.success) {",
+            "  pm.collectionVariables.set('accessToken', r.data.accessToken);",
+            "  pm.collectionVariables.set('refreshToken', r.data.refreshToken);",
+            "  pm.test('Login successful', () => pm.response.to.have.status(200));",
+            "  pm.test('Has access token', () => pm.expect(r.data.accessToken).to.be.a('string'));",
+            "}"
+          ], "type": "text/javascript" } }],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"admin@fintrack.io\",\n  \"password\": \"Password@123\"\n}" },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
+            "description": "Logs in as Admin. Auto-saves access + refresh tokens to collection variables."
+          }
+        },
+        {
+          "name": "Login (Analyst)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "const r = pm.response.json();",
+            "if(r.success) {",
+            "  pm.collectionVariables.set('accessToken', r.data.accessToken);",
+            "  pm.collectionVariables.set('refreshToken', r.data.refreshToken);",
+            "}"
+          ], "type": "text/javascript" } }],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"analyst@fintrack.io\",\n  \"password\": \"Password@123\"\n}" },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Login (Viewer)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"viewer@fintrack.io\",\n  \"password\": \"Password@123\"\n}" },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Get Me",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Returns user profile', () => pm.response.to.have.status(200));",
+            "pm.test('No password in response', () => {",
+            "  const r = pm.response.json();",
+            "  pm.expect(r.data).to.not.have.property('password');",
+            "});"
+          ], "type": "text/javascript" } }],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/auth/me", "host": ["{{baseUrl}}"], "path": ["auth", "me"] }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "const r = pm.response.json();",
+            "if(r.success) {",
+            "  pm.collectionVariables.set('accessToken', r.data.accessToken);",
+            "  pm.collectionVariables.set('refreshToken', r.data.refreshToken);",
+            "  pm.test('Token rotated', () => pm.response.to.have.status(200));",
+            "}"
+          ], "type": "text/javascript" } }],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}" },
+            "url": { "raw": "{{baseUrl}}/auth/refresh", "host": ["{{baseUrl}}"], "path": ["auth", "refresh"] }
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"currentPassword\": \"Password@123\",\n  \"newPassword\": \"NewPass@456\",\n  \"confirmPassword\": \"NewPass@456\"\n}" },
+            "url": { "raw": "{{baseUrl}}/auth/change-password", "host": ["{{baseUrl}}"], "path": ["auth", "change-password"] }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}" },
+            "url": { "raw": "{{baseUrl}}/auth/logout", "host": ["{{baseUrl}}"], "path": ["auth", "logout"] }
+          }
+        },
+        {
+          "name": "❌ Login - Wrong Password (should 401)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Rejects wrong password', () => pm.response.to.have.status(401));"
+          ], "type": "text/javascript" } }],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"admin@fintrack.io\",\n  \"password\": \"wrongpassword\"\n}" },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "👥 Users (Admin only)",
+      "item": [
+        {
+          "name": "List Users",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));",
+            "pm.test('Has pagination', () => {",
+            "  const r = pm.response.json();",
+            "  pm.expect(r.pagination).to.have.property('total');",
+            "});"
+          ], "type": "text/javascript" } }],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/users?page=1&limit=10", "host": ["{{baseUrl}}"], "path": ["users"], "query": [
+              { "key": "page", "value": "1" },
+              { "key": "limit", "value": "10" },
+              { "key": "role", "value": "ADMIN", "disabled": true },
+              { "key": "status", "value": "ACTIVE", "disabled": true },
+              { "key": "search", "value": "alice", "disabled": true }
+            ]}
+          }
+        },
+        {
+          "name": "Create User",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "const r = pm.response.json();",
+            "if(r.success) pm.collectionVariables.set('userId', r.data.id);",
+            "pm.test('User created', () => pm.response.to.have.status(201));"
+          ], "type": "text/javascript" } }],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"newuser@fintrack.io\",\n  \"name\": \"New User\",\n  \"password\": \"Password@123\",\n  \"role\": \"ANALYST\"\n}" },
+            "url": { "raw": "{{baseUrl}}/users", "host": ["{{baseUrl}}"], "path": ["users"] }
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/users/{{userId}}", "host": ["{{baseUrl}}"], "path": ["users", "{{userId}}"] }
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"role\": \"VIEWER\",\n  \"status\": \"INACTIVE\"\n}" },
+            "url": { "raw": "{{baseUrl}}/users/{{userId}}", "host": ["{{baseUrl}}"], "path": ["users", "{{userId}}"] }
+          }
+        },
+        {
+          "name": "Deactivate User",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/users/{{userId}}", "host": ["{{baseUrl}}"], "path": ["users", "{{userId}}"] }
+          }
+        },
+        {
+          "name": "❌ Viewer tries to list users (should 403)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Forbidden for non-admin', () => pm.response.to.have.status(403));"
+          ], "type": "text/javascript" } }],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/users", "host": ["{{baseUrl}}"], "path": ["users"] },
+            "description": "Login as Viewer first, then run this to see 403"
+          }
+        }
+      ]
+    },
+    {
+      "name": "💰 Transactions",
+      "item": [
+        {
+          "name": "List Transactions",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/transactions?page=1&limit=10", "host": ["{{baseUrl}}"], "path": ["transactions"], "query": [
+              { "key": "page", "value": "1" },
+              { "key": "limit", "value": "10" },
+              { "key": "type", "value": "INCOME", "disabled": true },
+              { "key": "category", "value": "Salary", "disabled": true },
+              { "key": "startDate", "value": "2025-01-01", "disabled": true },
+              { "key": "endDate", "value": "2025-12-31", "disabled": true },
+              { "key": "minAmount", "value": "100", "disabled": true },
+              { "key": "maxAmount", "value": "5000", "disabled": true },
+              { "key": "search", "value": "salary", "disabled": true },
+              { "key": "sortBy", "value": "date", "disabled": true },
+              { "key": "sortOrder", "value": "desc", "disabled": true },
+              { "key": "includeDeleted", "value": "false", "disabled": true }
+            ]}
+          }
+        },
+        {
+          "name": "Create Transaction (Income)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "const r = pm.response.json();",
+            "if(r.success) pm.collectionVariables.set('transactionId', r.data.id);",
+            "pm.test('Created 201', () => pm.response.to.have.status(201));"
+          ], "type": "text/javascript" } }],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"amount\": 5000,\n  \"type\": \"INCOME\",\n  \"category\": \"Salary\",\n  \"date\": \"2025-03-01\",\n  \"description\": \"March salary\",\n  \"notes\": \"Includes performance bonus\",\n  \"tags\": [\"salary\", \"recurring\"]\n}" },
+            "url": { "raw": "{{baseUrl}}/transactions", "host": ["{{baseUrl}}"], "path": ["transactions"] }
+          }
+        },
+        {
+          "name": "Create Transaction (Expense)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"amount\": 1200,\n  \"type\": \"EXPENSE\",\n  \"category\": \"Rent\",\n  \"date\": \"2025-03-05\",\n  \"description\": \"Monthly rent\",\n  \"tags\": [\"fixed\", \"housing\"]\n}" },
+            "url": { "raw": "{{baseUrl}}/transactions", "host": ["{{baseUrl}}"], "path": ["transactions"] }
+          }
+        },
+        {
+          "name": "Get Transaction by ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/transactions/{{transactionId}}", "host": ["{{baseUrl}}"], "path": ["transactions", "{{transactionId}}"] }
+          }
+        },
+        {
+          "name": "Update Transaction",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"amount\": 5500,\n  \"description\": \"March salary (updated)\"\n}" },
+            "url": { "raw": "{{baseUrl}}/transactions/{{transactionId}}", "host": ["{{baseUrl}}"], "path": ["transactions", "{{transactionId}}"] }
+          }
+        },
+        {
+          "name": "Soft Delete Transaction",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Deleted successfully', () => pm.response.to.have.status(200));",
+            "pm.test('Mentions soft delete', () => {",
+            "  const r = pm.response.json();",
+            "  pm.expect(r.message).to.include('soft delete');",
+            "});"
+          ], "type": "text/javascript" } }],
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/transactions/{{transactionId}}", "host": ["{{baseUrl}}"], "path": ["transactions", "{{transactionId}}"] }
+          }
+        },
+        {
+          "name": "Restore Transaction (Admin only)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/transactions/{{transactionId}}/restore", "host": ["{{baseUrl}}"], "path": ["transactions", "{{transactionId}}", "restore"] }
+          }
+        },
+        {
+          "name": "Export as CSV",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/transactions/export/csv", "host": ["{{baseUrl}}"], "path": ["transactions", "export", "csv"] }
+          }
+        },
+        {
+          "name": "❌ Viewer tries to create (should 403)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Viewer blocked from creating', () => pm.response.to.have.status(403));"
+          ], "type": "text/javascript" } }],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"amount\": 100,\n  \"type\": \"EXPENSE\",\n  \"category\": \"Food & Dining\",\n  \"date\": \"2025-03-01\"\n}" },
+            "url": { "raw": "{{baseUrl}}/transactions", "host": ["{{baseUrl}}"], "path": ["transactions"] },
+            "description": "Login as Viewer first to test this"
+          }
+        },
+        {
+          "name": "❌ Invalid amount (should 422)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Rejects negative amount', () => pm.response.to.have.status(422));"
+          ], "type": "text/javascript" } }],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"amount\": -500,\n  \"type\": \"EXPENSE\",\n  \"category\": \"Food & Dining\",\n  \"date\": \"2025-03-01\"\n}" },
+            "url": { "raw": "{{baseUrl}}/transactions", "host": ["{{baseUrl}}"], "path": ["transactions"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📊 Dashboard",
+      "item": [
+        {
+          "name": "Summary",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));",
+            "pm.test('Has net balance', () => {",
+            "  const r = pm.response.json();",
+            "  pm.expect(r.data).to.have.property('netBalance');",
+            "  pm.expect(r.data).to.have.property('savingsRate');",
+            "});"
+          ], "type": "text/javascript" } }],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/dashboard/summary", "host": ["{{baseUrl}}"], "path": ["dashboard", "summary"], "query": [
+              { "key": "startDate", "value": "2025-01-01", "disabled": true },
+              { "key": "endDate", "value": "2025-12-31", "disabled": true }
+            ]}
+          }
+        },
+        {
+          "name": "Category Breakdown",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/dashboard/categories", "host": ["{{baseUrl}}"], "path": ["dashboard", "categories"] }
+          }
+        },
+        {
+          "name": "Monthly Trends (6 months)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Returns 6 months', () => {",
+            "  const r = pm.response.json();",
+            "  pm.expect(r.data).to.have.lengthOf(6);",
+            "});"
+          ], "type": "text/javascript" } }],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/dashboard/trends/monthly?months=6", "host": ["{{baseUrl}}"], "path": ["dashboard", "trends", "monthly"], "query": [{ "key": "months", "value": "6" }] }
+          }
+        },
+        {
+          "name": "Weekly Cash Flow",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/dashboard/trends/weekly", "host": ["{{baseUrl}}"], "path": ["dashboard", "trends", "weekly"] }
+          }
+        },
+        {
+          "name": "Recent Activity",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/dashboard/recent?limit=10", "host": ["{{baseUrl}}"], "path": ["dashboard", "recent"], "query": [{ "key": "limit", "value": "10" }] }
+          }
+        },
+        {
+          "name": "Anomaly Detection ⚡",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));",
+            "pm.test('Each anomaly has zScore', () => {",
+            "  const r = pm.response.json();",
+            "  r.data.forEach(a => pm.expect(a).to.have.property('zScore'));",
+            "});"
+          ], "type": "text/javascript" } }],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/dashboard/anomalies", "host": ["{{baseUrl}}"], "path": ["dashboard", "anomalies"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📝 Audit",
+      "item": [
+        {
+          "name": "List All Audit Logs (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/audit?page=1&limit=20", "host": ["{{baseUrl}}"], "path": ["audit"], "query": [
+              { "key": "page", "value": "1" },
+              { "key": "limit", "value": "20" },
+              { "key": "action", "value": "LOGIN", "disabled": true },
+              { "key": "entity", "value": "Transaction", "disabled": true }
+            ]}
+          }
+        },
+        {
+          "name": "Transaction Change History",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/audit/Transaction/{{transactionId}}", "host": ["{{baseUrl}}"], "path": ["audit", "Transaction", "{{transactionId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🏥 Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('API is healthy', () => pm.response.to.have.status(200));",
+            "pm.test('Status is ok', () => {",
+            "  const r = pm.response.json();",
+            "  pm.expect(r.status).to.equal('ok');",
+            "});"
+          ], "type": "text/javascript" } }],
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:3000/health", "host": ["http://localhost:3000"], "path": ["health"] }
+          }
+        },
+        {
+          "name": "API Info",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:3000/", "host": ["http://localhost:3000"], "path": [""] }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>FinTrack — Finance Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07080d;--s1:#0e1018;--s2:#141720;--s3:#1c1f2e;
+  --border:#ffffff0f;--border2:#ffffff18;
+  --purple:#7c6dfa;--purple2:#a89bfc;--purple-glow:#7c6dfa22;
+  --green:#22d07a;--green2:#4ade80;
+  --red:#f05252;--red2:#fb7185;
+  --amber:#f59e0b;--amber2:#fbbf24;
+  --blue:#38bdf8;--blue2:#7dd3fc;
+  --text:#f1f5f9;--muted:#64748b;--muted2:#94a3b8;
+  --r:12px;--r2:8px;
+}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;min-height:100vh;font-size:14px;line-height:1.5}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+
+/* ── LOGIN ── */
+#login{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg);z-index:100}
+.login-wrap{width:400px}
+.login-logo{font-size:32px;font-weight:700;margin-bottom:8px;letter-spacing:-1px}
+.login-logo span{color:var(--purple)}
+.login-sub{color:var(--muted);font-size:14px;margin-bottom:40px}
+.login-card{background:var(--s1);border:1px solid var(--border2);border-radius:16px;padding:32px;max-height:70vh;overflow-y:auto}
+.lbl{font-size:12px;color:var(--muted);margin-bottom:6px;letter-spacing:.05em;text-transform:uppercase;font-weight:500}
+.inp{width:100%;padding:11px 14px;background:var(--s2);border:1px solid var(--border);border-radius:var(--r2);color:var(--text);font-size:14px;outline:none;transition:border .2s;margin-bottom:14px}
+.inp:focus{border-color:var(--purple)}
+.login-btn{width:100%;padding:13px;background:var(--purple);border:none;border-radius:var(--r2);color:#fff;font-size:15px;font-weight:600;cursor:pointer;letter-spacing:.01em;transition:opacity .2s;margin-top:4px}
+.login-btn:hover{opacity:.85}
+.quick{display:flex;gap:8px;margin-top:16px}
+.q-btn{flex:1;padding:9px;font-size:12px;background:var(--s2);border:1px solid var(--border);color:var(--muted2);border-radius:var(--r2);cursor:pointer;font-weight:500;transition:all .2s}
+.q-btn:hover{background:var(--purple-glow);border-color:var(--purple);color:var(--purple2)}
+.err{color:var(--red);font-size:13px;margin-top:10px;display:none}
+.succ{color:var(--green2);font-size:13px;margin-top:10px;display:none}
+.form-section{display:none}.form-section.show{display:block}
+.admin-note{background:rgba(124,109,250,.08);border:1px solid rgba(124,109,250,.2);border-radius:var(--r2);padding:12px 14px;font-size:12px;color:var(--muted2);margin-bottom:18px;line-height:1.6}
+.admin-note strong{color:var(--purple2)}
+.tab-toggle{display:flex;background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:4px;margin-bottom:0}
+.tab-btn{flex:1;padding:9px;font-size:13px;font-weight:600;background:transparent;border:none;color:var(--muted);cursor:pointer;border-radius:7px;transition:all .2s}
+.tab-btn.active{background:var(--purple);color:#fff}
+.inp-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.login-sub{color:var(--muted);font-size:14px;margin-bottom:24px}
+
+/* ── SHELL ── */
+#app{display:none}
+.shell{display:flex;min-height:100vh}
+
+/* ── SIDEBAR ── */
+.sidebar{width:240px;min-height:100vh;background:var(--s1);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:50}
+.sb-logo{padding:24px 20px 20px;font-size:20px;font-weight:700;letter-spacing:-0.5px;border-bottom:1px solid var(--border)}
+.sb-logo span{color:var(--purple)}
+.sb-section{padding:12px 12px 4px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:600}
+.nav{padding:3px 8px;display:flex;align-items:center;gap:10px;border-radius:var(--r2);cursor:pointer;color:var(--muted2);font-size:13.5px;font-weight:500;margin:1px 8px;padding:9px 12px;transition:all .15s;border:1px solid transparent}
+.nav svg{width:16px;height:16px;flex-shrink:0;opacity:.7}
+.nav:hover{background:var(--s3);color:var(--text)}
+.nav.active{background:var(--purple-glow);color:var(--purple2);border-color:var(--border2)}
+.nav.active svg{opacity:1}
+.sb-footer{margin-top:auto;padding:16px;border-top:1px solid var(--border)}
+.user-info{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--purple-glow);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--purple2)}
+.user-name{font-size:13px;font-weight:600}
+.user-role{font-size:11px;color:var(--muted)}
+.sign-out{width:100%;padding:8px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:var(--r2);cursor:pointer;font-size:12px;transition:all .2s}
+.sign-out:hover{border-color:var(--red);color:var(--red)}
+
+/* ── MAIN ── */
+.main{margin-left:240px;flex:1;min-height:100vh}
+.topbar{padding:20px 28px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--s1);position:sticky;top:0;z-index:40;backdrop-filter:blur(8px)}
+.page-title{font-size:20px;font-weight:700;letter-spacing:-.3px}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.api-badge{display:flex;align-items:center;gap:6px;background:var(--s2);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--muted2)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.content{padding:24px 28px}
+
+/* ── PAGES ── */
+.page{display:none}.page.show{display:block}
+
+/* ── STAT CARDS ── */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.stat{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:20px;position:relative;overflow:hidden;transition:border .2s}
+.stat:hover{border-color:var(--border2)}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-bottom:10px}
+.stat-value{font-size:28px;font-weight:700;letter-spacing:-1px;margin-bottom:4px}
+.stat-sub{font-size:12px;color:var(--muted)}
+.stat-icon{position:absolute;right:16px;top:16px;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center}
+.stat-icon svg{width:18px;height:18px}
+.s-green .stat-value{color:var(--green2)}
+.s-green .stat-icon{background:rgba(34,208,122,.1)}
+.s-green .stat-icon svg{color:var(--green)}
+.s-red .stat-value{color:var(--red2)}
+.s-red .stat-icon{background:rgba(240,82,82,.1)}
+.s-red .stat-icon svg{color:var(--red)}
+.s-purple .stat-value{color:var(--purple2)}
+.s-purple .stat-icon{background:var(--purple-glow)}
+.s-purple .stat-icon svg{color:var(--purple)}
+.s-amber .stat-value{color:var(--amber2)}
+.s-amber .stat-icon{background:rgba(245,158,11,.1)}
+.s-amber .stat-icon svg{color:var(--amber)}
+
+/* ── CHARTS ── */
+.charts-row{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:20px}
+.chart-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:20px}
+.card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.card-title{font-size:13px;font-weight:600;color:var(--muted2);text-transform:uppercase;letter-spacing:.06em}
+.legend{display:flex;gap:14px}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)}
+.leg-dot{width:8px;height:8px;border-radius:2px}
+
+/* ── TABLE CARD ── */
+.tcard{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:20px}
+.thead{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--border)}
+.tcard-title{font-size:14px;font-weight:600}
+.filters{display:flex;gap:8px;align-items:center}
+.fsel,.finp{padding:7px 12px;background:var(--s2);border:1px solid var(--border);border-radius:var(--r2);color:var(--text);font-size:13px;outline:none}
+.fsel:focus,.finp:focus{border-color:var(--purple)}
+.finp{width:180px}
+.finp::placeholder{color:var(--muted)}
+table{width:100%;border-collapse:collapse}
+th{padding:11px 20px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-weight:600;border-bottom:1px solid var(--border)}
+td{padding:14px 20px;font-size:13.5px;border-bottom:1px solid rgba(255,255,255,.04)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.018)}
+.tfoot{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-top:1px solid var(--border)}
+.page-info{font-size:12px;color:var(--muted)}
+.pbtns{display:flex;gap:6px}
+.pbtn{padding:5px 14px;background:var(--s2);border:1px solid var(--border);border-radius:var(--r2);color:var(--muted2);font-size:12px;cursor:pointer;transition:all .2s}
+.pbtn:hover:not(:disabled){background:var(--s3);border-color:var(--border2);color:var(--text)}
+.pbtn:disabled{opacity:.3;cursor:not-allowed}
+.pbtn.cur{background:var(--purple-glow);border-color:var(--purple);color:var(--purple2)}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.03em}
+.b-green{background:rgba(34,208,122,.12);color:#4ade80}
+.b-red{background:rgba(240,82,82,.12);color:#fb7185}
+.b-purple{background:var(--purple-glow);color:var(--purple2)}
+.b-amber{background:rgba(245,158,11,.12);color:var(--amber2)}
+.b-blue{background:rgba(56,189,248,.1);color:var(--blue2)}
+.b-gray{background:rgba(255,255,255,.07);color:var(--muted2)}
+.b-active{background:rgba(34,208,122,.1);color:#4ade80}
+.b-inactive{background:rgba(240,82,82,.1);color:#fb7185}
+
+/* ── ACTION BUTTONS ── */
+.abtn{padding:5px 12px;background:transparent;border:1px solid var(--border);border-radius:var(--r2);color:var(--muted2);font-size:12px;cursor:pointer;transition:all .2s}
+.abtn:hover{border-color:var(--border2);color:var(--text)}
+.abtn.d:hover{border-color:var(--red);color:var(--red)}
+.abtn.r:hover{border-color:var(--green);color:var(--green)}
+
+/* ── NEW TRANSACTION BTN ── */
+.new-btn{display:flex;align-items:center;gap:6px;padding:9px 16px;background:var(--purple);border:none;border-radius:var(--r2);color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:opacity .2s}
+.new-btn:hover{opacity:.85}
+
+/* ── ANOMALY CARDS ── */
+.anomaly-grid{display:grid;gap:12px}
+.anom{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;transition:border .2s}
+.anom:hover{border-color:var(--border2)}
+.anom.high{border-left:3px solid var(--red)}
+.anom.low{border-left:3px solid var(--amber)}
+.anom-cat{font-size:15px;font-weight:600;margin-bottom:4px}
+.anom-meta{font-size:12px;color:var(--muted);margin-top:4px}
+.anom-stats{font-size:11px;color:var(--muted);margin-top:6px}
+.z-score{font-size:26px;font-weight:700;letter-spacing:-1px;text-align:right}
+.z-high{color:var(--red2)}
+.z-low{color:var(--amber2)}
+.anom-amount{font-size:14px;font-weight:600;text-align:right;margin-top:2px}
+
+/* ── MODAL ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:200;backdrop-filter:blur(2px)}
+.overlay.show{display:flex}
+.modal{background:var(--s1);border:1px solid var(--border2);border-radius:16px;padding:28px;width:460px;max-height:90vh;overflow-y:auto}
+.modal h3{font-size:18px;font-weight:700;margin-bottom:6px;letter-spacing:-.3px}
+.modal-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+.mfooter{display:flex;justify-content:flex-end;gap:10px;margin-top:24px;padding-top:20px;border-top:1px solid var(--border)}
+.m-cancel{padding:10px 20px;background:transparent;border:1px solid var(--border);border-radius:var(--r2);color:var(--muted2);cursor:pointer;font-size:14px}
+.m-cancel:hover{border-color:var(--border2);color:var(--text)}
+.m-submit{padding:10px 22px;background:var(--purple);border:none;border-radius:var(--r2);color:#fff;font-size:14px;font-weight:600;cursor:pointer}
+.m-submit:hover{opacity:.85}
+.mrow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:500;z-index:300;display:none;animation:slide-in .2s ease}
+@keyframes slide-in{from{transform:translateY(8px);opacity:0}to{transform:translateY(0);opacity:1}}
+.toast.s{background:#1a3a28;border:1px solid rgba(34,208,122,.3);color:#4ade80}
+.toast.e{background:#3a1a1a;border:1px solid rgba(240,82,82,.3);color:#fb7185}
+
+/* ── EMPTY/LOADING ── */
+.loader,.empty-state{text-align:center;padding:48px;color:var(--muted);font-size:13px}
+.spin{display:inline-block;width:20px;height:20px;border:2px solid var(--border2);border-top-color:var(--purple);border-radius:50%;animation:spin .6s linear infinite;margin-bottom:12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── AUDIT ACTION COLORS ── */
+.a-CREATE{color:#4ade80}.a-UPDATE{color:var(--amber2)}.a-DELETE{color:#fb7185}
+.a-RESTORE{color:var(--blue2)}.a-LOGIN{color:var(--purple2)}.a-LOGOUT{color:var(--muted2)}
+
+/* ── CATEGORY BARS ── */
+.cat-bar-wrap{margin-bottom:12px}
+.cat-bar-head{display:flex;justify-content:space-between;margin-bottom:5px;font-size:12px}
+.cat-bar-name{color:var(--muted2)}
+.cat-bar-val{font-weight:600}
+.cat-bar-bg{height:5px;background:var(--s3);border-radius:3px}
+.cat-bar-fill{height:100%;border-radius:3px;transition:width .6s ease}
+
+/* ── WEEKLY BARS ── */
+.weekly-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:4px}
+.week-bar{background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center}
+.week-label{font-size:11px;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.06em}
+.week-val-wrap{margin-bottom:4px}
+.week-income{font-size:13px;font-weight:600;color:var(--green2)}
+.week-expense{font-size:13px;font-weight:600;color:var(--red2)}
+.week-net{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){.stat-grid{grid-template-columns:repeat(2,1fr)}.charts-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══════════════════════════════════════════════════════════════════ -->
+<div id="login">
+<div class="login-wrap">
+  <div class="login-logo">Fin<span>Track</span></div>
+  <div class="login-sub">Finance Data Processing &amp; Access Control</div>
+  <div style="margin-bottom:24px"></div>
+  <div class="tab-toggle">
+    <button class="tab-btn active" id="tabSignIn" onclick="switchTab('signin')">Sign In</button>
+    <button class="tab-btn" id="tabSignUp" onclick="switchTab('signup')">Create Account</button>
+  </div>
+  <div class="login-card">
+
+    <!-- SIGN IN FORM -->
+    <div class="form-section show" id="formSignIn">
+      <div class="lbl">Email address</div>
+      <input class="inp" id="lemail" type="email" value="admin@fintrack.io"/>
+      <div class="lbl">Password</div>
+      <input class="inp" id="lpwd" type="password" value="Password@123" onkeydown="if(event.key==='Enter')doLogin()"/>
+      <button class="login-btn" onclick="doLogin()">Sign in to dashboard</button>
+      <div class="err" id="lerr"></div>
+      <div class="quick">
+        <button class="q-btn" onclick="qlogin('admin')">Admin</button>
+        <button class="q-btn" onclick="qlogin('analyst')">Analyst</button>
+        <button class="q-btn" onclick="qlogin('viewer')">Viewer</button>
+      </div>
+    </div>
+
+    <!-- SIGN UP FORM -->
+    <div class="form-section" id="formSignUp">
+      <div class="admin-note">
+        <strong>Demo system:</strong> New accounts are provisioned by an admin.
+        Fill in your details below — the system will register you with
+        <strong>Viewer</strong> access by default. An admin can upgrade your role later.
+      </div>
+      <div class="lbl">Full name</div>
+      <input class="inp" id="suName" type="text" placeholder="Jane Smith"/>
+      <div class="lbl">Email address</div>
+      <input class="inp" id="suEmail" type="email" placeholder="you@company.io"/>
+      <div class="lbl">Password</div>
+      <input class="inp" id="suPwd" type="password" placeholder="Min 8 chars, uppercase, number &amp; symbol"/>
+      <div class="lbl">Confirm password</div>
+      <input class="inp" id="suPwd2" type="password" placeholder="Repeat password"/>
+      <div class="lbl">Requested role</div>
+      <select class="inp" id="suRole">
+        <option value="VIEWER">Viewer — read-only access</option>
+        <option value="ANALYST">Analyst — view &amp; manage records</option>
+      </select>
+      <div style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r2);padding:11px 14px;font-size:12px;color:var(--muted);margin-bottom:14px">
+        Admin role requires manual assignment by an existing administrator.
+      </div>
+      <button class="login-btn" onclick="doSignUp()">Create Account</button>
+      <div class="err" id="suerr"></div>
+      <div class="succ" id="susucc"></div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- ══ APP ════════════════════════════════════════════════════════════════════ -->
+<div id="app">
+<div class="shell">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sb-logo">Fin<span>Track</span></div>
+    <div style="padding:16px 0;flex:1;overflow-y:auto">
+      <div class="sb-section">Overview</div>
+      <div class="nav active" onclick="goPage('dash',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </div>
+      <div class="nav" onclick="goPage('tx',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Transactions
+      </div>
+      <div class="nav" onclick="goPage('anom',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Anomalies
+      </div>
+      <div class="sb-section">Management</div>
+      <div class="nav" id="navUsers" onclick="goPage('users',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Users
+      </div>
+      <div class="nav" id="navAudit" onclick="goPage('audit',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Audit Log
+      </div>
+    </div>
+    <div class="sb-footer">
+      <div class="user-info">
+        <div class="avatar" id="avt"></div>
+        <div>
+          <div class="user-name" id="uname"></div>
+          <div class="user-role" id="urole"></div>
+        </div>
+      </div>
+      <button class="sign-out" onclick="doLogout()">Sign out</button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="page-title" id="ptitle">Dashboard</div>
+      <div class="topbar-right">
+        <div class="api-badge"><div class="dot"></div>API Connected</div>
+      </div>
+    </div>
+    <div class="content">
+
+      <!-- ══ DASHBOARD PAGE ══ -->
+      <div class="page show" id="page-dash">
+        <div class="stat-grid" id="statGrid"><div class="loader"><div class="spin"></div><br>Loading stats...</div></div>
+        <div class="charts-row">
+          <div class="chart-card">
+            <div class="card-head">
+              <span class="card-title">Monthly Trends</span>
+              <div class="legend">
+                <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div>Income</div>
+                <div class="leg-item"><div class="leg-dot" style="background:var(--red)"></div>Expenses</div>
+                <div class="leg-item"><div class="leg-dot" style="background:var(--purple)"></div>Net</div>
+              </div>
+            </div>
+            <canvas id="lineChart" height="100"></canvas>
+          </div>
+          <div class="chart-card">
+            <div class="card-head"><span class="card-title">Expenses by Category</span></div>
+            <canvas id="donutChart" height="140"></canvas>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div class="tcard">
+            <div class="thead"><div class="tcard-title">Recent Activity</div></div>
+            <table>
+              <thead><tr><th>Date</th><th>Description</th><th>Amount</th></tr></thead>
+              <tbody id="recentBody"><tr><td colspan="3" class="loader">Loading...</td></tr></tbody>
+            </table>
+          </div>
+          <div class="chart-card">
+            <div class="card-head"><span class="card-title">Weekly Cash Flow</span></div>
+            <div class="weekly-row" id="weeklyRow"><div class="loader" style="grid-column:1/-1">Loading...</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ TRANSACTIONS PAGE ══ -->
+      <div class="page" id="page-tx">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <div>
+            <div style="font-size:13px;color:var(--muted)" id="txSubtitle">All financial records</div>
+          </div>
+          <button class="new-btn" onclick="openTxModal()" id="newTxBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Transaction
+          </button>
+        </div>
+        <div class="tcard">
+          <div class="thead">
+            <div class="tcard-title" id="txCount"></div>
+            <div class="filters">
+              <select class="fsel" id="ftType" onchange="txPage=1;loadTx()">
+                <option value="">All Types</option>
+                <option value="INCOME">Income</option>
+                <option value="EXPENSE">Expense</option>
+              </select>
+              <input class="finp" id="ftSearch" placeholder="Search description..." oninput="clearTimeout(dtimer);dtimer=setTimeout(()=>{txPage=1;loadTx()},400)"/>
+              <select class="fsel" id="ftSort" onchange="txPage=1;loadTx()">
+                <option value="date|desc">Newest first</option>
+                <option value="date|asc">Oldest first</option>
+                <option value="amount|desc">Highest amount</option>
+                <option value="amount|asc">Lowest amount</option>
+              </select>
+            </div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th><th>Description</th><th>Category</th>
+                <th>Type</th><th>Amount</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="txBody"><tr><td colspan="6" class="loader"><div class="spin"></div></td></tr></tbody>
+          </table>
+          <div class="tfoot">
+            <span class="page-info" id="txPageInfo"></span>
+            <div class="pbtns" id="txPBtns"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ ANOMALIES PAGE ══ -->
+      <div class="page" id="page-anom">
+        <div style="background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span style="font-size:13px;color:var(--muted2)">Transactions deviating more than <strong style="color:var(--text)">2 standard deviations</strong> from their category average. Sorted by z-score.</span>
+        </div>
+        <div class="anomaly-grid" id="anomGrid"><div class="loader"><div class="spin"></div><br>Analyzing transactions...</div></div>
+      </div>
+
+      <!-- ══ USERS PAGE ══ -->
+      <div class="page" id="page-users">
+        <div class="tcard">
+          <div class="thead"><div class="tcard-title">All users</div></div>
+          <table>
+            <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Transactions</th><th>Joined</th></tr></thead>
+            <tbody id="usersBody"><tr><td colspan="6" class="loader"><div class="spin"></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══ AUDIT PAGE ══ -->
+      <div class="page" id="page-audit">
+        <div class="tcard">
+          <div class="thead">
+            <div class="tcard-title">Activity history</div>
+            <div class="filters">
+              <select class="fsel" id="fAAction" onchange="auditPage=1;loadAudit()">
+                <option value="">All actions</option>
+                <option value="CREATE">CREATE</option>
+                <option value="UPDATE">UPDATE</option>
+                <option value="DELETE">DELETE</option>
+                <option value="RESTORE">RESTORE</option>
+                <option value="LOGIN">LOGIN</option>
+                <option value="LOGOUT">LOGOUT</option>
+              </select>
+              <select class="fsel" id="fAEntity" onchange="auditPage=1;loadAudit()">
+                <option value="">All entities</option>
+                <option value="Transaction">Transaction</option>
+                <option value="User">User</option>
+              </select>
+            </div>
+          </div>
+          <table>
+            <thead><tr><th>Time</th><th>Action</th><th>Entity</th><th>Record ID</th><th>Performed by</th></tr></thead>
+            <tbody id="auditBody"><tr><td colspan="5" class="loader"><div class="spin"></div></td></tr></tbody>
+          </table>
+          <div class="tfoot">
+            <span class="page-info" id="auditPageInfo"></span>
+            <div class="pbtns" id="auditPBtns"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ MODAL ══════════════════════════════════════════════════════════════════ -->
+<div class="overlay" id="txModal">
+  <div class="modal">
+    <h3>New Transaction</h3>
+    <div class="modal-sub">Add a new financial record to the system</div>
+    <div class="mrow">
+      <div>
+        <div class="lbl">Amount</div>
+        <input class="inp" id="mAmt" type="number" placeholder="0.00" step="0.01"/>
+      </div>
+      <div>
+        <div class="lbl">Type</div>
+        <select class="inp" id="mType"><option value="INCOME">Income</option><option value="EXPENSE">Expense</option></select>
+      </div>
+    </div>
+    <div class="mrow">
+      <div>
+        <div class="lbl">Category</div>
+        <select class="inp" id="mCat">
+          <option>Salary</option><option>Freelance</option><option>Investment</option>
+          <option>Food & Dining</option><option>Transport</option><option>Utilities</option>
+          <option>Healthcare</option><option>Entertainment</option><option>Shopping</option>
+          <option>Education</option><option>Rent</option><option>Insurance</option><option>Other</option>
+        </select>
+      </div>
+      <div>
+        <div class="lbl">Date</div>
+        <input class="inp" id="mDate" type="date"/>
+      </div>
+    </div>
+    <div>
+      <div class="lbl">Description</div>
+      <input class="inp" id="mDesc" type="text" placeholder="Optional description"/>
+    </div>
+    <div>
+      <div class="lbl">Notes</div>
+      <input class="inp" id="mNotes" type="text" placeholder="Optional notes"/>
+    </div>
+    <div class="mfooter">
+      <button class="m-cancel" onclick="closeTxModal()">Cancel</button>
+      <button class="m-submit" onclick="submitTx()">Create Transaction</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// Auto-detect: if opened via file:// use localhost, if hosted use same origin or env
+const BASE = window.location.protocol === 'file:'
+  ? 'http://localhost:3000/api/v1'
+  : (window.FINTRACK_API_URL || window.location.origin + '/api/v1');
+let token='', user=null, txPage=1, auditPage=1, dtimer=null;
+let lChart=null, dChart=null;
+
+const CATS = {email:{admin:'admin@fintrack.io',analyst:'analyst@fintrack.io',viewer:'viewer@fintrack.io'}};
+
+function qlogin(r){
+  document.getElementById('lemail').value=CATS.email[r];
+  document.getElementById('lpwd').value='Password@123';
+  doLogin();
+}
+
+async function doLogin(){
+  const e=document.getElementById('lemail').value, p=document.getElementById('lpwd').value;
+  const err=document.getElementById('lerr');
+  err.style.display='none';
+  try{
+    const d=await req('/auth/login','POST',{email:e,password:p},true);
+    token=d.data.accessToken; user=d.data.user;
+    document.getElementById('login').style.display='none';
+    document.getElementById('app').style.display='block';
+    document.getElementById('uname').textContent=user.name;
+    document.getElementById('urole').textContent=user.role;
+    document.getElementById('avt').textContent=user.name.split(' ').map(x=>x[0]).join('').slice(0,2);
+    if(user.role!=='ADMIN'){
+      document.getElementById('navUsers').style.display='none';
+      document.getElementById('navAudit').style.display='none';
+    }
+    initDash();
+  }catch(ex){
+    err.textContent=ex.message||'Login failed';
+    err.style.display='block';
+  }
+}
+
+function doLogout(){
+  token=''; user=null;
+  document.getElementById('app').style.display='none';
+  document.getElementById('login').style.display='flex';
+  if(lChart){lChart.destroy();lChart=null;}
+  if(dChart){dChart.destroy();dChart=null;}
+}
+
+async function req(path,method='GET',body=null,noAuth=false){
+  const h={'Content-Type':'application/json'};
+  if(!noAuth&&token) h['Authorization']='Bearer '+token;
+  const r=await fetch(BASE+path,{method,headers:h,body:body?JSON.stringify(body):null});
+  const d=await r.json();
+  if(!d.success) throw new Error(d.message||'Request failed');
+  return d;
+}
+
+function goPage(name,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('show'));
+  document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('show');
+  el.classList.add('active');
+  const titles={dash:'Dashboard',tx:'Transactions',anom:'Anomaly Detection',users:'User Management',audit:'Audit Log'};
+  document.getElementById('ptitle').textContent=titles[name]||name;
+  if(name==='tx') loadTx();
+  if(name==='anom') loadAnom();
+  if(name==='users') loadUsers();
+  if(name==='audit') loadAudit();
+}
+
+/* ═══ DASHBOARD ═══════════════════════════════════════════════════════════════ */
+async function initDash(){
+  try{
+    const [sum,trends,cats,recent,weekly]=await Promise.all([
+      req('/dashboard/summary'),
+      req('/dashboard/trends/monthly?months=6'),
+      req('/dashboard/categories'),
+      req('/dashboard/recent?limit=8'),
+      req('/dashboard/trends/weekly')
+    ]);
+    renderStats(sum.data);
+    renderLine(trends.data);
+    renderDonut(cats.data.expenses);
+    renderRecent(recent.data);
+    renderWeekly(weekly.data);
+    renderCatBars(cats.data.expenses);
+  }catch(ex){toast(ex.message,'e');}
+}
+
+function renderStats(d){
+  document.getElementById('statGrid').innerHTML=`
+  <div class="stat s-green">
+    <div class="stat-label">Total Income</div>
+    <div class="stat-value">${fmtMoney(d.income)}</div>
+    <div class="stat-sub">${d.incomeCount} transactions · avg ${fmtMoney(d.avgIncome)}</div>
+    <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+  </div>
+  <div class="stat s-red">
+    <div class="stat-label">Total Expenses</div>
+    <div class="stat-value">${fmtMoney(d.expenses)}</div>
+    <div class="stat-sub">${d.expenseCount} transactions · avg ${fmtMoney(d.avgExpense)}</div>
+    <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg></div>
+  </div>
+  <div class="stat s-purple">
+    <div class="stat-label">Net Balance</div>
+    <div class="stat-value">${fmtMoney(d.netBalance)}</div>
+    <div class="stat-sub">Savings rate: ${d.savingsRate}%</div>
+    <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+  </div>
+  <div class="stat s-amber">
+    <div class="stat-label">Transactions</div>
+    <div class="stat-value">${d.transactionCount}</div>
+    <div class="stat-sub">${d.incomeCount} in · ${d.expenseCount} out</div>
+    <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+  </div>`;
+}
+
+function renderLine(data){
+  if(lChart){lChart.destroy();}
+  const ctx=document.getElementById('lineChart').getContext('2d');
+  lChart=new Chart(ctx,{
+    type:'line',
+    data:{
+      labels:data.map(d=>d.month),
+      datasets:[
+        {label:'Income',data:data.map(d=>d.income),borderColor:'#22d07a',backgroundColor:'rgba(34,208,122,.08)',tension:.4,fill:true,pointRadius:4,pointBackgroundColor:'#22d07a'},
+        {label:'Expenses',data:data.map(d=>d.expenses),borderColor:'#f05252',backgroundColor:'rgba(240,82,82,.08)',tension:.4,fill:true,pointRadius:4,pointBackgroundColor:'#f05252'},
+        {label:'Net',data:data.map(d=>d.net),borderColor:'#7c6dfa',backgroundColor:'transparent',tension:.4,pointRadius:3,borderDash:[4,3]},
+      ]
+    },
+    options:{
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{ticks:{color:'#64748b',font:{size:11}},grid:{color:'rgba(255,255,255,.04)'}},
+        y:{ticks:{color:'#64748b',font:{size:11},callback:v=>'₹'+v.toLocaleString()},grid:{color:'rgba(255,255,255,.04)'}}
+      },
+      interaction:{intersect:false,mode:'index'}
+    }
+  });
+}
+
+function renderDonut(data){
+  if(dChart){dChart.destroy();}
+  const top=(data||[]).slice(0,6);
+  const ctx=document.getElementById('donutChart').getContext('2d');
+  dChart=new Chart(ctx,{
+    type:'doughnut',
+    data:{
+      labels:top.map(c=>c.category),
+      datasets:[{data:top.map(c=>c.total),backgroundColor:['#7c6dfa','#f05252','#f59e0b','#22d07a','#38bdf8','#ec4899'],borderWidth:0,hoverOffset:4}]
+    },
+    options:{
+      cutout:'68%',
+      plugins:{legend:{position:'bottom',labels:{color:'#94a3b8',font:{size:11},padding:10,boxWidth:10,boxHeight:10}}}
+    }
+  });
+}
+
+function renderRecent(data){
+  document.getElementById('recentBody').innerHTML=data.map(t=>`
+  <tr>
+    <td style="color:var(--muted);font-size:12px">${fmtDate(t.date)}</td>
+    <td>${t.description||t.category}</td>
+    <td style="color:${t.type==='INCOME'?'var(--green2)':'var(--red2)'};font-weight:600">
+      ${t.type==='INCOME'?'+':'-'}${fmtMoney(t.amount)}
+    </td>
+  </tr>`).join('')||'<tr><td colspan="3" class="empty-state">No recent transactions</td></tr>';
+}
+
+function renderWeekly(data){
+  document.getElementById('weeklyRow').innerHTML=data.map(w=>`
+  <div class="week-bar">
+    <div class="week-label">${w.week}</div>
+    <div class="week-income">+${fmtMoney(w.income)}</div>
+    <div class="week-expense">-${fmtMoney(w.expenses)}</div>
+    <div class="week-net" style="color:${w.net>=0?'var(--green)':'var(--red)'}">
+      net ${fmtMoney(w.net)}
+    </div>
+  </div>`).join('');
+}
+
+function renderCatBars(data){}
+
+/* ═══ TRANSACTIONS ════════════════════════════════════════════════════════════ */
+async function loadTx(){
+  const type=document.getElementById('ftType').value;
+  const search=document.getElementById('ftSearch').value;
+  const sortRaw=document.getElementById('ftSort').value.split('|');
+  let qs=`?page=${txPage}&limit=12&sortBy=${sortRaw[0]}&sortOrder=${sortRaw[1]}`;
+  if(type) qs+=`&type=${type}`;
+  if(search) qs+=`&search=${encodeURIComponent(search)}`;
+  document.getElementById('txBody').innerHTML='<tr><td colspan="6" class="loader"><div class="spin"></div></td></tr>';
+  try{
+    const r=await req('/transactions'+qs);
+    const role=user.role;
+    document.getElementById('txCount').textContent=`${r.pagination.total} records`;
+    document.getElementById('txSubtitle').textContent=`Showing ${r.data.length} of ${r.pagination.total} transactions`;
+    document.getElementById('txBody').innerHTML=r.data.map(t=>`
+    <tr>
+      <td style="color:var(--muted);font-size:12px">${fmtDate(t.date)}</td>
+      <td>
+        <div style="font-weight:500">${t.description||'—'}</div>
+        ${t.notes?`<div style="font-size:11px;color:var(--muted);margin-top:2px">${t.notes}</div>`:''}
+      </td>
+      <td><span class="badge b-gray">${t.category}</span></td>
+      <td><span class="badge ${t.type==='INCOME'?'b-green':'b-red'}">${t.type}</span></td>
+      <td style="color:${t.type==='INCOME'?'var(--green2)':'var(--red2)'};font-weight:600">
+        ${t.type==='INCOME'?'+':'-'}${fmtMoney(t.amount)}
+      </td>
+      <td>
+        ${role!=='VIEWER'?`<button class="abtn d" onclick="deleteTx('${t.id}')">Delete</button>`:'<span style="color:var(--muted);font-size:12px">—</span>'}
+        ${role==='ADMIN'?`<button class="abtn" onclick="restoreTx('${t.id}')" style="margin-left:4px;display:none" id="rb-${t.id}">Restore</button>`:''}
+      </td>
+    </tr>`).join('')||'<tr><td colspan="6" class="empty-state">No transactions found</td></tr>';
+    renderPager('tx',r.pagination,()=>{txPage=r.pagination.page;});
+  }catch(ex){toast(ex.message,'e');}
+}
+
+function renderPager(prefix,p,cb){
+  document.getElementById(prefix+'PageInfo').textContent=`Page ${p.page} of ${p.totalPages||1} · ${p.total} total`;
+  const wrap=document.getElementById(prefix+'PBtns');
+  wrap.innerHTML=`
+    <button class="pbtn" ${!p.hasPrev?'disabled':''} onclick="${prefix}Page=${p.page-1};${prefix==='tx'?'loadTx()':'loadAudit()'}">Prev</button>
+    <button class="pbtn cur">${p.page}</button>
+    <button class="pbtn" ${!p.hasNext?'disabled':''} onclick="${prefix}Page=${p.page+1};${prefix==='tx'?'loadTx()':'loadAudit()'}">Next</button>`;
+}
+
+async function deleteTx(id){
+  if(!confirm('Soft-delete this transaction? It can be restored by an Admin.')) return;
+  try{
+    await req(`/transactions/${id}`,'DELETE');
+    toast('Transaction deleted (restorable)','s');
+    loadTx();
+  }catch(ex){toast(ex.message,'e');}
+}
+
+async function restoreTx(id){
+  try{
+    await req(`/transactions/${id}/restore`,'POST');
+    toast('Transaction restored','s');
+    loadTx();
+  }catch(ex){toast(ex.message,'e');}
+}
+
+function openTxModal(){
+  if(user.role==='VIEWER'){toast('Viewers cannot create transactions','e');return;}
+  document.getElementById('mDate').value=new Date().toISOString().split('T')[0];
+  document.getElementById('mAmt').value='';
+  document.getElementById('mDesc').value='';
+  document.getElementById('mNotes').value='';
+  document.getElementById('txModal').classList.add('show');
+}
+
+function closeTxModal(){document.getElementById('txModal').classList.remove('show');}
+
+async function submitTx(){
+  const amt=parseFloat(document.getElementById('mAmt').value);
+  if(!amt||amt<=0){toast('Enter a valid positive amount','e');return;}
+  try{
+    await req('/transactions','POST',{
+      amount:amt,
+      type:document.getElementById('mType').value,
+      category:document.getElementById('mCat').value,
+      date:document.getElementById('mDate').value,
+      description:document.getElementById('mDesc').value||undefined,
+      notes:document.getElementById('mNotes').value||undefined
+    });
+    closeTxModal();
+    toast('Transaction created successfully','s');
+    loadTx();
+    initDash();
+  }catch(ex){toast(ex.message,'e');}
+}
+
+/* ═══ ANOMALIES ═══════════════════════════════════════════════════════════════ */
+async function loadAnom(){
+  document.getElementById('anomGrid').innerHTML='<div class="loader"><div class="spin"></div><br>Analyzing data...</div>';
+  try{
+    const r=await req('/dashboard/anomalies');
+    if(!r.data.length){
+      document.getElementById('anomGrid').innerHTML='<div class="empty-state" style="padding:60px;text-align:center;color:var(--muted)">No anomalies detected — spending patterns look normal</div>';
+      return;
+    }
+    document.getElementById('anomGrid').innerHTML=r.data.map(a=>`
+    <div class="anom ${a.deviation==='unusually_high'?'high':'low'}">
+      <div>
+        <div class="anom-cat">${a.category} <span class="badge ${a.type==='INCOME'?'b-green':'b-red'}" style="font-size:10px;vertical-align:middle">${a.type}</span></div>
+        <div style="font-size:13px;color:var(--muted2);margin-top:4px">${a.description||'No description'}</div>
+        <div class="anom-meta">${fmtDate(a.date)}</div>
+        <div class="anom-stats">Category mean: ${fmtMoney(a.mean)} · Std dev: ${fmtMoney(a.stdDev)}</div>
+      </div>
+      <div>
+        <div class="z-score ${a.deviation==='unusually_high'?'z-high':'z-low'}">z=${a.zScore}</div>
+        <div class="anom-amount" style="color:${a.type==='INCOME'?'var(--green2)':'var(--red2)'}">${fmtMoney(a.amount)}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px;text-align:right">${a.deviation.replace('_',' ')}</div>
+      </div>
+    </div>`).join('');
+  }catch(ex){toast(ex.message,'e');}
+}
+
+/* ═══ USERS ═══════════════════════════════════════════════════════════════════ */
+async function loadUsers(){
+  if(user.role!=='ADMIN'){
+    document.getElementById('usersBody').innerHTML='<tr><td colspan="6" class="empty-state">Admin access required</td></tr>';
+    return;
+  }
+  try{
+    const r=await req('/users?limit=50');
+    document.getElementById('usersBody').innerHTML=r.data.map(u=>`
+    <tr>
+      <td>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:30px;height:30px;border-radius:50%;background:var(--purple-glow);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--purple2);flex-shrink:0">
+            ${u.name.split(' ').map(x=>x[0]).join('').slice(0,2)}
+          </div>
+          <span style="font-weight:500">${u.name}</span>
+        </div>
+      </td>
+      <td style="color:var(--muted)">${u.email}</td>
+      <td><span class="badge ${u.role==='ADMIN'?'b-purple':u.role==='ANALYST'?'b-amber':'b-gray'}">${u.role}</span></td>
+      <td><span class="badge ${u.status==='ACTIVE'?'b-active':'b-inactive'}">${u.status}</span></td>
+      <td style="color:var(--muted)">${u._count?.transactions??'—'}</td>
+      <td style="color:var(--muted);font-size:12px">${fmtDate(u.createdAt)}</td>
+    </tr>`).join('');
+  }catch(ex){toast(ex.message,'e');}
+}
+
+/* ═══ AUDIT ═══════════════════════════════════════════════════════════════════ */
+async function loadAudit(){
+  if(user.role!=='ADMIN'){
+    document.getElementById('auditBody').innerHTML='<tr><td colspan="5" class="empty-state">Admin access required</td></tr>';
+    return;
+  }
+  const action=document.getElementById('fAAction').value;
+  const entity=document.getElementById('fAEntity').value;
+  let qs=`?page=${auditPage}&limit=15`;
+  if(action) qs+=`&action=${action}`;
+  if(entity) qs+=`&entity=${entity}`;
+  document.getElementById('auditBody').innerHTML='<tr><td colspan="5" class="loader"><div class="spin"></div></td></tr>';
+  try{
+    const r=await req('/audit'+qs);
+    document.getElementById('auditBody').innerHTML=r.data.map(l=>`
+    <tr>
+      <td style="color:var(--muted);font-size:12px;white-space:nowrap">${fmtDateTime(l.createdAt)}</td>
+      <td><span class="a-${l.action}" style="font-weight:600;font-size:13px">${l.action}</span></td>
+      <td><span class="badge b-gray">${l.entity}</span></td>
+      <td style="font-family:monospace;font-size:11px;color:var(--muted)">${l.entityId.slice(0,12)}...</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:24px;height:24px;border-radius:50%;background:var(--purple-glow);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:var(--purple2)">
+            ${(l.performedBy?.name||'?').split(' ').map(x=>x[0]).join('').slice(0,2)}
+          </div>
+          <span style="font-size:13px">${l.performedBy?.name||'—'}</span>
+          <span class="badge ${l.performedBy?.role==='ADMIN'?'b-purple':l.performedBy?.role==='ANALYST'?'b-amber':'b-gray'}" style="font-size:10px">${l.performedBy?.role||''}</span>
+        </div>
+      </td>
+    </tr>`).join('')||'<tr><td colspan="5" class="empty-state">No audit logs found</td></tr>';
+    renderPager('audit',r.pagination,()=>{});
+  }catch(ex){toast(ex.message,'e');}
+}
+
+/* ═══ UTILS ═══════════════════════════════════════════════════════════════════ */
+function fmtMoney(n){
+  const v=parseFloat(n)||0;
+  if(v>=100000) return '₹'+(v/100000).toFixed(1)+'L';
+  if(v>=1000) return '₹'+(v/1000).toFixed(1)+'K';
+  return '₹'+v.toFixed(0);
+}
+function fmtDate(d){return new Date(d).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});}
+function fmtDateTime(d){return new Date(d).toLocaleString('en-IN',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',hour12:true});}
+
+function toast(msg,type){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast '+type; t.style.display='block';
+  clearTimeout(t._t); t._t=setTimeout(()=>t.style.display='none',3500);
+}
+
+document.getElementById('txModal').addEventListener('click',function(e){if(e.target===this)closeTxModal();});
+
+function switchTab(tab){
+  document.getElementById('formSignIn').classList.toggle('show', tab==='signin');
+  document.getElementById('formSignUp').classList.toggle('show', tab==='signup');
+  document.getElementById('tabSignIn').classList.toggle('active', tab==='signin');
+  document.getElementById('tabSignUp').classList.toggle('active', tab==='signup');
+  document.getElementById('lerr').style.display='none';
+  document.getElementById('suerr').style.display='none';
+  document.getElementById('susucc').style.display='none';
+}
+
+async function doSignUp(){
+  const name=document.getElementById('suName').value.trim();
+  const email=document.getElementById('suEmail').value.trim();
+  const pwd=document.getElementById('suPwd').value;
+  const pwd2=document.getElementById('suPwd2').value;
+  const role=document.getElementById('suRole').value;
+  const err=document.getElementById('suerr');
+  const succ=document.getElementById('susucc');
+  err.style.display='none'; succ.style.display='none';
+
+  if(!name){err.textContent='Please enter your full name.';err.style.display='block';return;}
+  if(!email){err.textContent='Please enter an email address.';err.style.display='block';return;}
+  if(pwd.length<8){err.textContent='Password must be at least 8 characters.';err.style.display='block';return;}
+  if(!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/.test(pwd)){
+    err.textContent='Password needs uppercase, lowercase, number and special character (@$!%*?&).';
+    err.style.display='block';return;
+  }
+  if(pwd!==pwd2){err.textContent='Passwords do not match.';err.style.display='block';return;}
+
+  try{
+    // Auto-authorize via the seeded admin account (demo system)
+    const loginRes=await req('/auth/login','POST',{email:'admin@fintrack.io',password:'Password@123'},true);
+    const adminToken=loginRes.data.accessToken;
+
+    const h={'Content-Type':'application/json','Authorization':'Bearer '+adminToken};
+    const r=await fetch(BASE+'/users',{method:'POST',headers:h,body:JSON.stringify({email,name,password:pwd,role})});
+    const d=await r.json();
+    if(!d.success) throw new Error(d.message);
+
+    succ.textContent='Account created! You can now sign in with '+email;
+    succ.style.display='block';
+    document.getElementById('suName').value='';
+    document.getElementById('suEmail').value='';
+    document.getElementById('suPwd').value='';
+    document.getElementById('suPwd2').value='';
+    setTimeout(()=>switchTab('signin'),2000);
+  }catch(ex){
+    err.textContent=ex.message||'Account creation failed';
+    err.style.display='block';
+  }
+}
+</script>
+</body>
+</html>
