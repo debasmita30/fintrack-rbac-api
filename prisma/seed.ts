@@ -104,6 +104,35 @@ async function main() {
       createdById: admin.id,
     });
   }
+  // Analyst transactions
+for (let i = 0; i < 20; i++) {
+  const category = expenseCategories[i % expenseCategories.length];
+  transactionData.push({
+    amount: randomBetween(50, 1500),
+    type: "EXPENSE",
+    category,
+    date: randomDate(sixMonthsAgo, now),
+    description: `${category} expense`,
+    notes: null,
+    tags: JSON.stringify(["expense"]),
+    createdById: analyst.id,  // ← analyst's data
+  });
+}
+
+// Viewer transactions (read-only user, but has historical data)
+for (let i = 0; i < 10; i++) {
+  const category = expenseCategories[i % expenseCategories.length];
+  transactionData.push({
+    amount: randomBetween(50, 800),
+    type: "EXPENSE",
+    category,
+    date: randomDate(sixMonthsAgo, now),
+    description: `${category} expense`,
+    notes: null,
+    tags: JSON.stringify(["expense"]),
+    createdById: viewer.id,  // ← viewer's data
+  });
+}
 
   // Expense transactions
   const expenseCategories = [
